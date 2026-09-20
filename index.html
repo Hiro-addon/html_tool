@@ -13,8 +13,8 @@ box-sizing:border-box;
 
 body{
 margin:0;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-background:#f1f3f5;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+background:#eef1f5;
 color:#202124;
 overflow:hidden;
 }
@@ -41,8 +41,8 @@ z-index:30;
 }
 
 .logo{
-font-weight:700;
 font-size:17px;
+font-weight:700;
 white-space:nowrap;
 }
 
@@ -238,10 +238,6 @@ padding:6px 7px;
 border-radius:5px;
 }
 
-.element-tools button:active{
-background:#ffffff33;
-}
-
 .empty{
 height:600px;
 display:flex;
@@ -252,10 +248,6 @@ color:#999;
 font-size:14px;
 border:2px dashed #ddd;
 border-radius:10px;
-}
-
-.settings{
-padding-bottom:30px;
 }
 
 .setting-section{
@@ -316,6 +308,10 @@ border-radius:7px;
 background:#fff;
 }
 
+input[type=range]{
+accent-color:#1a73e8;
+}
+
 .range{
 display:flex;
 align-items:center;
@@ -328,7 +324,7 @@ flex:1;
 
 .range span{
 font-size:11px;
-min-width:42px;
+min-width:45px;
 text-align:right;
 }
 
@@ -342,7 +338,7 @@ gap:7px;
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:6px;
-margin-top:8px;
+margin-top:7px;
 }
 
 .action{
@@ -350,11 +346,6 @@ height:36px;
 border-radius:7px;
 background:#f1f3f4;
 font-size:12px;
-}
-
-.action.blue{
-background:#1a73e8;
-color:#fff;
 }
 
 .action.red{
@@ -440,7 +431,7 @@ line-height:1.5;
 resize:none;
 }
 
-.close{
+.modal-close{
 background:#d93025;
 color:#fff;
 padding:7px 10px;
@@ -480,10 +471,6 @@ display:none;
 
 @media(max-width:600px){
 
-body{
-overflow:hidden;
-}
-
 header{
 height:56px;
 }
@@ -492,17 +479,13 @@ height:56px;
 font-size:15px;
 }
 
-.top-actions{
-gap:3px;
-}
-
 .top-btn{
 font-size:11px;
 padding:0 8px;
 }
 
-.top-btn:nth-child(1),
-.top-btn:nth-child(2){
+.top-btn.undo,
+.top-btn.redo{
 display:none;
 }
 
@@ -569,25 +552,16 @@ border-radius:8px;
 font-size:11px;
 }
 
-.mobile-bottom button.active{
-background:#1a73e8;
-color:#fff;
-}
-
-.element-tools{
-top:-38px;
-}
-
 }
 
 @media(max-width:380px){
 
-.top-btn{
-padding:0 6px;
-}
-
 .logo{
 font-size:14px;
+}
+
+.top-btn{
+padding:0 6px;
 }
 
 }
@@ -601,8 +575,8 @@ font-size:14px;
 <div class="logo">HTMLかんたん作成</div>
 
 <div class="top-actions">
-<button class="top-btn" onclick="undo()">↶</button>
-<button class="top-btn" onclick="redo()">↷</button>
+<button class="top-btn undo" onclick="undo()">↶</button>
+<button class="top-btn redo" onclick="redo()">↷</button>
 <button class="top-btn" onclick="newProject()">新規</button>
 <button class="top-btn primary" onclick="openCode()">HTML</button>
 <button class="top-btn save" onclick="downloadHTML()">保存</button>
@@ -648,7 +622,6 @@ font-size:14px;
 <span class="part-icon">▶</span>YouTube
 </button>
 
-
 <div class="group-title">フォーム</div>
 
 <button class="part" onclick="addElement('input')">
@@ -670,7 +643,6 @@ font-size:14px;
 <button class="part" onclick="addElement('select')">
 <span class="part-icon">▾</span>選択
 </button>
-
 
 <div class="group-title">レイアウト</div>
 
@@ -706,16 +678,21 @@ font-size:14px;
 
 </aside>
 
-
 <section class="center">
 
 <div class="toolbar">
 
-<button class="device active" id="desktop" onclick="setDevice('desktop')">🖥 PC</button>
+<button class="device active" id="desktop" onclick="setDevice('desktop')">
+🖥 PC
+</button>
 
-<button class="device" id="tablet" onclick="setDevice('tablet')">▣ タブレット</button>
+<button class="device" id="tablet" onclick="setDevice('tablet')">
+▣ タブレット
+</button>
 
-<button class="device" id="mobile" onclick="setDevice('mobile')">📱 スマホ</button>
+<button class="device" id="mobile" onclick="setDevice('mobile')">
+📱 スマホ
+</button>
 
 </div>
 
@@ -734,7 +711,6 @@ font-size:14px;
 
 </section>
 
-
 <aside class="right">
 
 <div class="panel-title">設定</div>
@@ -752,7 +728,6 @@ font-size:14px;
 
 </main>
 
-
 <div class="mobile-bottom">
 
 <button onclick="mobileParts()">＋ 部品</button>
@@ -761,7 +736,6 @@ font-size:14px;
 <button onclick="downloadHTML()">保存</button>
 
 </div>
-
 
 <div class="modal" id="codeModal">
 
@@ -773,17 +747,23 @@ font-size:14px;
 
 <div class="code-tabs">
 
-<button class="code-tab active" id="tabHTML" onclick="showCode('html')">HTML</button>
+<button class="code-tab active" id="tabHTML" onclick="showCode('html')">
+HTML
+</button>
 
-<button class="code-tab" id="tabCSS" onclick="showCode('css')">CSS</button>
+<button class="code-tab" id="tabCSS" onclick="showCode('css')">
+CSS
+</button>
 
-<button class="code-tab" id="tabJS" onclick="showCode('js')">JS</button>
+<button class="code-tab" id="tabJS" onclick="showCode('js')">
+JS
+</button>
 
 </div>
 
 <button onclick="copyCode()">コピー</button>
 
-<button class="close" onclick="closeCode()">閉じる</button>
+<button class="modal-close" onclick="closeCode()">閉じる</button>
 
 </div>
 
@@ -793,9 +773,7 @@ font-size:14px;
 
 </div>
 
-
 <div id="toast" class="toast"></div>
-
 
 <script>
 
@@ -809,14 +787,16 @@ let historyIndex=-1;
 let customCSS="";
 let customJS="";
 
+let editing=false;
 
-function state(){
+
+function getState(){
 
 return JSON.stringify({
-elements,
-nextId,
-customCSS,
-customJS
+elements:elements,
+nextId:nextId,
+customCSS:customCSS,
+customJS:customJS
 });
 
 }
@@ -824,15 +804,15 @@ customJS
 
 function saveHistory(){
 
-let s=state();
+let current=getState();
 
-if(history[historyIndex]===s)return;
+if(history[historyIndex]===current)return;
 
 history=history.slice(0,historyIndex+1);
 
-history.push(s);
+history.push(current);
 
-if(history.length>40){
+if(history.length>50){
 history.shift();
 }
 
@@ -841,14 +821,14 @@ historyIndex=history.length-1;
 }
 
 
-function restore(s){
+function restoreState(data){
 
-let data=JSON.parse(s);
+let obj=JSON.parse(data);
 
-elements=data.elements||[];
-nextId=data.nextId||1;
-customCSS=data.customCSS||"";
-customJS=data.customJS||"";
+elements=obj.elements||[];
+nextId=obj.nextId||1;
+customCSS=obj.customCSS||"";
+customJS=obj.customJS||"";
 
 selectedId=null;
 
@@ -863,7 +843,7 @@ if(historyIndex<=0)return;
 
 historyIndex--;
 
-restore(history[historyIndex]);
+restoreState(history[historyIndex]);
 
 }
 
@@ -874,7 +854,7 @@ if(historyIndex>=history.length-1)return;
 
 historyIndex++;
 
-restore(history[historyIndex]);
+restoreState(history[historyIndex]);
 
 }
 
@@ -883,7 +863,7 @@ function createElement(type){
 
 let e={
 id:nextId++,
-type,
+type:type,
 text:"",
 url:"",
 src:"",
@@ -928,7 +908,7 @@ e.url="https://example.com";
 }
 
 if(type==="image"){
-e.src="https://via.placeholder.com/600x300";
+e.src="";
 e.alt="画像";
 }
 
@@ -1013,7 +993,7 @@ selectedId=e.id;
 render();
 
 if(window.innerWidth<=600){
-mobileSettings();
+openMobileSettings();
 }
 
 }
@@ -1040,7 +1020,7 @@ saveHistory();
 
 let index=elements.findIndex(e=>e.id===id);
 
-if(index<0)return;
+if(index===-1)return;
 
 let copy=JSON.parse(JSON.stringify(elements[index]));
 
@@ -1059,7 +1039,7 @@ function moveElement(id,direction){
 
 let index=elements.findIndex(e=>e.id===id);
 
-if(index<0)return;
+if(index===-1)return;
 
 let target=index+direction;
 
@@ -1067,10 +1047,9 @@ if(target<0||target>=elements.length)return;
 
 saveHistory();
 
-[elements[index],elements[target]]=[
-elements[target],
-elements[index]
-];
+let item=elements.splice(index,1)[0];
+
+elements.splice(target,0,item);
 
 render();
 
@@ -1109,52 +1088,21 @@ let wrapper=document.createElement("div");
 
 wrapper.className="element";
 
+wrapper.dataset.id=e.id;
+
 if(e.id===selectedId){
 wrapper.classList.add("selected");
 }
 
-wrapper.draggable=true;
+wrapper.addEventListener("click",function(event){
 
-wrapper.addEventListener("dragstart",ev=>{
-ev.dataTransfer.setData("id",e.id);
-});
-
-wrapper.addEventListener("dragover",ev=>{
-ev.preventDefault();
-});
-
-wrapper.addEventListener("drop",ev=>{
-
-ev.preventDefault();
-
-let from=Number(ev.dataTransfer.getData("id"));
-
-if(!from||from===e.id)return;
-
-let fromIndex=elements.findIndex(x=>x.id===from);
-let toIndex=elements.findIndex(x=>x.id===e.id);
-
-if(fromIndex<0||toIndex<0)return;
-
-saveHistory();
-
-let item=elements.splice(fromIndex,1)[0];
-
-elements.splice(toIndex,0,item);
-
-render();
-
-});
-
-wrapper.onclick=ev=>{
-
-ev.stopPropagation();
+event.stopPropagation();
 
 selectedId=e.id;
 
 render();
 
-};
+});
 
 
 let tools=document.createElement("div");
@@ -1162,17 +1110,39 @@ let tools=document.createElement("div");
 tools.className="element-tools";
 
 tools.innerHTML=`
-<button onclick="event.stopPropagation();moveElement(${e.id},-1)">↑</button>
-<button onclick="event.stopPropagation();moveElement(${e.id},1)">↓</button>
-<button onclick="event.stopPropagation();duplicateElement(${e.id})">複製</button>
-<button onclick="event.stopPropagation();deleteElement(${e.id})">削除</button>
+<button type="button">↑</button>
+<button type="button">↓</button>
+<button type="button">複製</button>
+<button type="button">削除</button>
 `;
+
+let buttons=tools.querySelectorAll("button");
+
+buttons[0].onclick=function(event){
+event.stopPropagation();
+moveElement(e.id,-1);
+};
+
+buttons[1].onclick=function(event){
+event.stopPropagation();
+moveElement(e.id,1);
+};
+
+buttons[2].onclick=function(event){
+event.stopPropagation();
+duplicateElement(e.id);
+};
+
+buttons[3].onclick=function(event){
+event.stopPropagation();
+deleteElement(e.id);
+};
 
 wrapper.appendChild(tools);
 
 let content=document.createElement("div");
 
-content.innerHTML=elementPreview(e);
+content.innerHTML=getElementHTML(e);
 
 wrapper.appendChild(content);
 
@@ -1183,7 +1153,7 @@ canvas.appendChild(wrapper);
 }
 
 
-function styleString(e){
+function getStyle(e){
 
 return `
 color:${e.color};
@@ -1206,9 +1176,9 @@ ${e.shadow?"box-shadow:0 4px 16px #0003;":""}
 }
 
 
-function elementPreview(e){
+function getElementHTML(e){
 
-let s=styleString(e);
+let s=getStyle(e);
 
 if(e.type==="heading"){
 return `<${e.level} style="${s}">${esc(e.text)}</${e.level}>`;
@@ -1219,7 +1189,7 @@ return `<p style="${s}">${esc(e.text).replace(/\n/g,"<br>")}</p>`;
 }
 
 if(e.type==="button"){
-return `<button style="${s}" onclick="location.href='${attr(e.url)}'">${esc(e.text)}</button>`;
+return `<button type="button" style="${s}" onclick="location.href='${attr(e.url)}'">${esc(e.text)}</button>`;
 }
 
 if(e.type==="link"){
@@ -1227,22 +1197,28 @@ return `<a href="${attr(e.url)}" style="${s}">${esc(e.text)}</a>`;
 }
 
 if(e.type==="image"){
-return `<img src="${attr(e.src)}" alt="${attr(e.alt)}" style="${s}max-width:100%;height:auto">`;
+
+if(!e.src){
+return `<div style="${s};min-height:100px;background:#eee;display:flex;align-items:center;justify-content:center">画像URLを設定してください</div>`;
+}
+
+return `<img src="${attr(e.src)}" alt="${attr(e.alt)}" style="${s};max-width:100%;height:auto">`;
+
 }
 
 if(e.type==="video"){
-return `<video src="${attr(e.src)}" controls style="${s}max-width:100%"></video>`;
+return `<video src="${attr(e.src)}" controls style="${s};max-width:100%"></video>`;
 }
 
 if(e.type==="youtube"){
 
-let id=youtubeId(e.src);
+let id=getYoutubeId(e.src);
 
 if(!id){
-return `<div style="${s}background:#eee;text-align:center">YouTube URLを設定</div>`;
+return `<div style="${s};min-height:100px;background:#eee;display:flex;align-items:center;justify-content:center">YouTube URLを設定してください</div>`;
 }
 
-return `<iframe src="https://www.youtube.com/embed/${id}" style="${s}height:315px;border:0" allowfullscreen></iframe>`;
+return `<iframe src="https://www.youtube.com/embed/${id}" style="${s};height:315px;border:0" allowfullscreen></iframe>`;
 
 }
 
@@ -1259,22 +1235,22 @@ return `<label style="${s};display:block"><input type="checkbox"> ${esc(e.text)}
 }
 
 if(e.type==="radio"){
-return `<label style="${s};display:block"><input type="radio" name="radio"> ${esc(e.text)}</label>`;
+return `<label style="${s};display:block"><input type="radio" name="radio-group"> ${esc(e.text)}</label>`;
 }
 
 if(e.type==="select"){
 
-let items=e.text.split(",").filter(x=>x.trim());
+let list=e.text.split(",").filter(x=>x.trim());
 
-return `<select style="${s}">${items.map(x=>`<option>${esc(x.trim())}</option>`).join("")}</select>`;
+return `<select style="${s}">${list.map(x=>`<option>${esc(x.trim())}</option>`).join("")}</select>`;
 
 }
 
 if(e.type==="list"){
 
-let items=e.text.split(",").filter(x=>x.trim());
+let list=e.text.split(",").filter(x=>x.trim());
 
-return `<ul style="${s}">${items.map(x=>`<li>${esc(x.trim())}</li>`).join("")}</ul>`;
+return `<ul style="${s}">${list.map(x=>`<li>${esc(x.trim())}</li>`).join("")}</ul>`;
 
 }
 
@@ -1283,14 +1259,15 @@ if(e.type==="table"){
 let rows=e.text.split("\n");
 
 return `<table style="${s};border-collapse:collapse">
-${rows.map((row,i)=>`
+${rows.map((row,index)=>`
 <tr>
-${row.split(",").map(cell=>
-i===0
-?`<th style="border:1px solid ${e.borderColor};padding:8px">${esc(cell)}</th>`
-:`<td style="border:1px solid ${e.borderColor};padding:8px">${esc(cell)}</td>`
-).join("")}
-</tr>`).join("")}
+${row.split(",").map(cell=>{
+return index===0
+?`<th style="border:1px solid ${e.borderColor};padding:8px">${esc(cell.trim())}</th>`
+:`<td style="border:1px solid ${e.borderColor};padding:8px">${esc(cell.trim())}</td>`;
+}).join("")}
+</tr>
+`).join("")}
 </table>`;
 
 }
@@ -1349,19 +1326,21 @@ if(!e)return;
 
 let html="";
 
-html+=`<div class="setting-section">`;
-
-html+=`<div class="setting-title">内容</div>`;
+html+=`<div class="setting-section">
+<div class="setting-title">内容</div>`;
 
 if(e.type==="heading"){
 
 html+=`
 <div class="field">
-<label>見出し</label>
+<label>見出しレベル</label>
 <select data-key="level">
-<option value="h1">大見出し</option>
-<option value="h2">中見出し</option>
-<option value="h3">小見出し</option>
+<option value="h1">H1</option>
+<option value="h2">H2</option>
+<option value="h3">H3</option>
+<option value="h4">H4</option>
+<option value="h5">H5</option>
+<option value="h6">H6</option>
 </select>
 </div>`;
 
@@ -1381,7 +1360,7 @@ if(["button","link"].includes(e.type)){
 
 html+=`
 <div class="field">
-<label>リンク先</label>
+<label>リンクURL</label>
 <input type="url" data-key="url" value="${attr(e.url)}">
 </div>`;
 
@@ -1445,15 +1424,15 @@ html+=`
 </div>
 
 <div class="field">
-<label>サイズ</label>
+<label>文字サイズ</label>
 <div class="range">
-<input type="range" min="8" max="72" data-key="fontSize" value="${e.fontSize}">
+<input type="range" min="8" max="72" step="1" data-key="fontSize" value="${e.fontSize}">
 <span>${e.fontSize}px</span>
 </div>
 </div>
 
 <div class="field">
-<label>太さ</label>
+<label>文字の太さ</label>
 <select data-key="fontWeight">
 <option value="normal">通常</option>
 <option value="bold">太字</option>
@@ -1461,7 +1440,7 @@ html+=`
 </div>
 
 <div class="field">
-<label>位置</label>
+<label>文字位置</label>
 <select data-key="textAlign">
 <option value="left">左</option>
 <option value="center">中央</option>
@@ -1515,14 +1494,14 @@ html+=`
 
 <div class="field">
 <label>太さ</label>
-<input type="number" data-key="borderWidth" value="${e.borderWidth}" min="0" max="20">
+<input type="number" min="0" max="20" data-key="borderWidth" value="${e.borderWidth}">
 </div>
 
 </div>
 
 <div class="field">
 <label>角丸</label>
-<input type="number" data-key="borderRadius" value="${e.borderRadius}" min="0" max="100">
+<input type="number" min="0" max="100" data-key="borderRadius" value="${e.borderRadius}">
 </div>
 
 <label>
@@ -1535,7 +1514,7 @@ html+=`
 html+=`
 <div class="setting-section">
 
-<div class="setting-title">サイズ</div>
+<div class="setting-title">サイズ・余白</div>
 
 <div class="field">
 <label>幅</label>
@@ -1551,12 +1530,12 @@ html+=`
 
 <div class="field">
 <label>内側余白</label>
-<input type="number" data-key="padding" value="${e.padding}" min="0">
+<input type="number" min="0" data-key="padding" value="${e.padding}">
 </div>
 
 <div class="field">
 <label>外側余白</label>
-<input type="number" data-key="margin" value="${e.margin}" min="0">
+<input type="number" min="0" data-key="margin" value="${e.margin}">
 </div>
 
 </div>
@@ -1580,19 +1559,26 @@ html+=`
 
 box.innerHTML=html;
 
-box.querySelectorAll("[data-key]").forEach(input=>{
+bindSettings(e);
+
+}
+
+
+function bindSettings(e){
+
+let inputs=document.querySelectorAll("#settings [data-key]");
+
+inputs.forEach(input=>{
 
 let key=input.dataset.key;
 
 if(input.type==="checkbox"){
-input.checked=!!e[key];
+input.checked=Boolean(e[key]);
 }else{
 input.value=e[key]??"";
 }
 
-input.addEventListener("input",()=>{
-
-let old=state();
+input.addEventListener("input",function(){
 
 if(input.type==="checkbox"){
 e[key]=input.checked;
@@ -1600,25 +1586,34 @@ e[key]=input.checked;
 e[key]=input.value;
 }
 
-if(old!==state()){
-history=history.slice(0,historyIndex+1);
-history.push(state());
-historyIndex=history.length-1;
-}
-
 renderCanvas();
 
-if(input.type==="range"){
+updateRangeLabel(input,e[key],key);
+
+});
+
+input.addEventListener("change",function(){
+
+saveHistory();
+
+});
+
+});
+
+}
+
+
+function updateRangeLabel(input,value,key){
+
+if(input.type!=="range")return;
+
 let span=input.parentElement.querySelector("span");
 
-if(span){
-span.textContent=e[key]+(key==="fontSize"?"px":"");
-}
-}
+if(!span)return;
 
-});
-
-});
+span.textContent=key==="fontSize"
+?value+"px"
+:value;
 
 }
 
@@ -1634,34 +1629,40 @@ x.classList.remove("active");
 });
 
 if(type==="mobile"){
+
 canvas.classList.add("mobile");
+
 document.getElementById("mobile").classList.add("active");
+
 }
 
 if(type==="tablet"){
+
 canvas.classList.add("tablet");
+
 document.getElementById("tablet").classList.add("active");
+
 }
 
 if(type==="desktop"){
+
 document.getElementById("desktop").classList.add("active");
-}
 
 }
 
+}
 
-function getHTML(){
 
-let title="My Website";
+function getFullHTML(){
 
-let body=elements.map(e=>elementPreview(e)).join("\n");
+let body=elements.map(e=>getElementHTML(e)).join("\n");
 
 return `<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${esc(title)}</title>
+<title>My Website</title>
 <style>
 *{box-sizing:border-box}
 body{
@@ -1679,10 +1680,13 @@ ${customCSS}
 </style>
 </head>
 <body>
+
 ${body}
+
 <script>
 ${customJS}
 <\/script>
+
 </body>
 </html>`;
 
@@ -1700,397 +1704,4 @@ showCode("html");
 
 function closeCode(){
 
-document.getElementById("codeModal").classList.remove("show");
-
-}
-
-
-function showCode(type){
-
-let code="";
-
-document.querySelectorAll(".code-tab").forEach(x=>{
-x.classList.remove("active");
-});
-
-if(type==="html"){
-
-document.getElementById("tabHTML").classList.add("active");
-
-code=getHTML();
-
-}
-
-if(type==="css"){
-
-document.getElementById("tabCSS").classList.add("active");
-
-code=`
-*{box-sizing:border-box}
-body{
-margin:0;
-padding:30px;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-}
-img,video,iframe{
-max-width:100%;
-}
-${customCSS}`;
-
-}
-
-if(type==="js"){
-
-document.getElementById("tabJS").classList.add("active");
-
-code=customJS;
-
-}
-
-document.getElementById("code").value=code;
-
-}
-
-
-function copyCode(){
-
-navigator.clipboard.writeText(
-document.getElementById("code").value
-);
-
-toast("コピーしました");
-
-}
-
-
-function downloadHTML(){
-
-let blob=new Blob(
-[getHTML()],
-{type:"text/html;charset=utf-8"}
-);
-
-let url=URL.createObjectURL(blob);
-
-let a=document.createElement("a");
-
-a.href=url;
-a.download="index.html";
-
-a.click();
-
-URL.revokeObjectURL(url);
-
-toast("HTMLを保存しました");
-
-}
-
-
-function saveProject(){
-
-let data=JSON.stringify({
-elements,
-nextId,
-customCSS,
-customJS
-},null,2);
-
-let blob=new Blob(
-[data],
-{type:"application/json"}
-);
-
-let url=URL.createObjectURL(blob);
-
-let a=document.createElement("a");
-
-a.href=url;
-a.download="project.json";
-
-a.click();
-
-URL.revokeObjectURL(url);
-
-toast("プロジェクトを保存しました");
-
-}
-
-
-function loadProject(){
-
-let input=document.createElement("input");
-
-input.type="file";
-input.accept=".json";
-
-input.onchange=()=>{
-
-let file=input.files[0];
-
-if(!file)return;
-
-let reader=new FileReader();
-
-reader.onload=()=>{
-
-try{
-
-restore(reader.result);
-
-toast("読み込みました");
-
-}catch{
-
-toast("読み込みに失敗しました");
-
-}
-
-};
-
-reader.readAsText(file);
-
-};
-
-input.click();
-
-}
-
-
-function newProject(){
-
-if(!confirm("現在のページを消しますか？"))return;
-
-saveHistory();
-
-elements=[];
-selectedId=null;
-nextId=1;
-
-render();
-
-}
-
-
-function restore(s){
-
-let data=JSON.parse(s);
-
-elements=data.elements||[];
-nextId=data.nextId||1;
-customCSS=data.customCSS||"";
-customJS=data.customJS||"";
-
-selectedId=null;
-
-render();
-
-}
-
-
-function youtubeId(url){
-
-try{
-
-let u=new URL(url);
-
-if(u.hostname==="youtu.be"){
-return u.pathname.slice(1);
-}
-
-if(u.searchParams.get("v")){
-return u.searchParams.get("v");
-}
-
-let parts=u.pathname.split("/");
-
-let i=parts.indexOf("embed");
-
-if(i>=0){
-return parts[i+1];
-}
-
-}catch{}
-
-return "";
-
-}
-
-
-function esc(v){
-
-return String(v??"")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
-
-}
-
-
-function escText(v){
-
-return String(v??"")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;");
-
-}
-
-
-function attr(v){
-
-return esc(v);
-
-}
-
-
-function toast(text){
-
-let t=document.getElementById("toast");
-
-t.textContent=text;
-
-t.style.display="block";
-
-clearTimeout(window.toastTimer);
-
-window.toastTimer=setTimeout(()=>{
-t.style.display="none";
-},1600);
-
-}
-
-
-function mobileParts(){
-
-document.querySelector(".left").style.display="block";
-
-document.querySelector(".left").style.position="fixed";
-
-document.querySelector(".left").style.left="0";
-
-document.querySelector(".left").style.top="56px";
-
-document.querySelector(".left").style.bottom="0";
-
-document.querySelector(".left").style.width="260px";
-
-document.querySelector(".left").style.zIndex="80";
-
-document.querySelector(".left").style.boxShadow="4px 0 15px #0003";
-
-}
-
-
-function mobileSettings(){
-
-if(!selectedId){
-
-toast("先に部品を選択してください");
-
-return;
-
-}
-
-let right=document.querySelector(".right");
-
-right.style.display="block";
-
-right.style.position="fixed";
-
-right.style.right="0";
-
-right.style.top="56px";
-
-right.style.bottom="0";
-
-right.style.width="300px";
-
-right.style.zIndex="80";
-
-right.style.boxShadow="-4px 0 15px #0003";
-
-}
-
-
-document.getElementById("canvas").addEventListener("click",e=>{
-
-if(e.target.id==="canvas"){
-
-selectedId=null;
-
-render();
-
-}
-
-});
-
-
-document.addEventListener("keydown",e=>{
-
-if((e.ctrlKey||e.metaKey)&&e.key==="z"){
-
-e.preventDefault();
-
-undo();
-
-}
-
-if((e.ctrlKey||e.metaKey)&&e.key==="y"){
-
-e.preventDefault();
-
-redo();
-
-}
-
-if((e.ctrlKey||e.metaKey)&&e.key==="s"){
-
-e.preventDefault();
-
-downloadHTML();
-
-}
-
-if(e.key==="Delete"&&selectedId){
-
-deleteElement(selectedId);
-
-}
-
-});
-
-
-document.addEventListener("click",e=>{
-
-if(window.innerWidth<=600){
-
-let left=document.querySelector(".left");
-let right=document.querySelector(".right");
-
-if(!left.contains(e.target)&&!e.target.closest(".mobile-bottom")){
-
-left.style.display="none";
-
-}
-
-if(!right.contains(e.target)&&!e.target.closest(".mobile-bottom")){
-
-right.style.display="none";
-
-}
-
-}
-
-});
-
-
-saveHistory();
-
-render();
-
-</script>
-
-</body>
-</html>
+document.getElementById
