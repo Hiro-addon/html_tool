@@ -11,12 +11,14 @@ box-sizing:border-box;
 -webkit-tap-highlight-color:transparent;
 }
 
-body{
+html,body{
 margin:0;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-background:#eef1f5;
-color:#202124;
+width:100%;
+height:100%;
 overflow:hidden;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+color:#202124;
+background:#eef1f5;
 }
 
 button,input,textarea,select{
@@ -24,8 +26,8 @@ font-family:inherit;
 }
 
 button{
-border:0;
 cursor:pointer;
+border:0;
 }
 
 header{
@@ -35,9 +37,9 @@ color:#fff;
 display:flex;
 align-items:center;
 padding:0 12px;
-gap:8px;
+gap:7px;
 position:relative;
-z-index:30;
+z-index:100;
 }
 
 .logo{
@@ -54,7 +56,7 @@ gap:5px;
 
 .top-btn{
 height:38px;
-padding:0 12px;
+padding:0 11px;
 border-radius:8px;
 background:#3c4043;
 color:#fff;
@@ -72,26 +74,29 @@ background:#188038;
 main{
 height:calc(100vh - 58px);
 display:grid;
-grid-template-columns:220px minmax(300px,1fr) 285px;
+grid-template-columns:220px minmax(300px,1fr) 290px;
 }
 
 .left{
 background:#fff;
 border-right:1px solid #ddd;
 overflow:auto;
+z-index:70;
 }
 
 .center{
 min-width:0;
-background:#e5e7eb;
+height:100%;
 display:flex;
 flex-direction:column;
+background:#e5e7eb;
 }
 
 .right{
 background:#fff;
 border-left:1px solid #ddd;
 overflow:auto;
+z-index:70;
 }
 
 .panel-title{
@@ -196,6 +201,18 @@ width:768px;
 max-width:768px;
 }
 
+.empty{
+height:600px;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+color:#999;
+font-size:14px;
+border:2px dashed #ddd;
+border-radius:10px;
+}
+
 .element{
 position:relative;
 border:2px solid transparent;
@@ -217,12 +234,12 @@ background:#1a73e80b;
 .element-tools{
 position:absolute;
 right:2px;
-top:-34px;
+top:-36px;
 display:none;
 background:#1a73e8;
 padding:3px;
 border-radius:7px;
-z-index:20;
+z-index:50;
 gap:2px;
 }
 
@@ -238,16 +255,8 @@ padding:6px 7px;
 border-radius:5px;
 }
 
-.empty{
-height:600px;
-display:flex;
-align-items:center;
-justify-content:center;
-text-align:center;
-color:#999;
-font-size:14px;
-border:2px dashed #ddd;
-border-radius:10px;
+.element-tools button:active{
+background:#ffffff33;
 }
 
 .setting-section{
@@ -309,6 +318,7 @@ background:#fff;
 }
 
 input[type=range]{
+width:100%;
 accent-color:#1a73e8;
 }
 
@@ -365,7 +375,7 @@ line-height:1.7;
 position:fixed;
 inset:0;
 background:#0008;
-z-index:100;
+z-index:200;
 display:none;
 align-items:center;
 justify-content:center;
@@ -387,8 +397,8 @@ flex-direction:column;
 }
 
 .modal-header{
-height:50px;
-padding:0 12px;
+height:52px;
+padding:0 10px;
 display:flex;
 align-items:center;
 border-bottom:1px solid #ddd;
@@ -417,6 +427,21 @@ background:#1a73e8;
 color:#fff;
 }
 
+.modal-copy{
+padding:7px 10px;
+border-radius:6px;
+background:#f1f3f4;
+font-size:12px;
+}
+
+.modal-close{
+background:#d93025;
+color:#fff;
+padding:7px 10px;
+border-radius:6px;
+font-size:12px;
+}
+
 .code{
 flex:1;
 width:100%;
@@ -429,19 +454,12 @@ font-family:monospace;
 font-size:12px;
 line-height:1.5;
 resize:none;
-}
-
-.modal-close{
-background:#d93025;
-color:#fff;
-padding:7px 10px;
-border-radius:6px;
-font-size:12px;
+outline:none;
 }
 
 .toast{
 position:fixed;
-bottom:20px;
+bottom:75px;
 left:50%;
 transform:translateX(-50%);
 background:#202124;
@@ -450,17 +468,22 @@ padding:10px 16px;
 border-radius:8px;
 font-size:13px;
 display:none;
-z-index:200;
+z-index:300;
+white-space:nowrap;
 }
 
 .mobile-bottom{
 display:none;
 }
 
+.mobile-overlay{
+display:none;
+}
+
 @media(max-width:900px){
 
 main{
-grid-template-columns:180px 1fr;
+grid-template-columns:180px minmax(300px,1fr);
 }
 
 .right{
@@ -497,14 +520,38 @@ position:relative;
 
 .left{
 display:none;
-}
-
-.center{
-height:100%;
+position:fixed;
+left:0;
+top:56px;
+bottom:62px;
+width:270px;
+box-shadow:4px 0 15px #0003;
 }
 
 .right{
 display:none;
+position:fixed;
+right:0;
+top:56px;
+bottom:62px;
+width:310px;
+box-shadow:-4px 0 15px #0003;
+}
+
+.mobile-overlay{
+position:fixed;
+inset:56px 0 62px 0;
+background:#0005;
+z-index:60;
+display:none;
+}
+
+.mobile-overlay.show{
+display:block;
+}
+
+.center{
+height:100%;
 }
 
 .toolbar{
@@ -518,7 +565,7 @@ font-size:11px;
 
 .canvas-area{
 padding:10px;
-padding-bottom:70px;
+padding-bottom:72px;
 }
 
 .canvas{
@@ -540,7 +587,7 @@ right:0;
 height:62px;
 background:#fff;
 border-top:1px solid #ddd;
-z-index:50;
+z-index:100;
 padding:7px;
 gap:6px;
 }
@@ -550,6 +597,15 @@ flex:1;
 background:#f1f3f4;
 border-radius:8px;
 font-size:11px;
+color:#202124;
+}
+
+.mobile-bottom button:active{
+background:#dfe1e5;
+}
+
+.toast{
+bottom:72px;
 }
 
 }
@@ -584,9 +640,11 @@ padding:0 6px;
 
 </header>
 
+<div class="mobile-overlay" id="mobileOverlay" onclick="closeMobilePanels()"></div>
+
 <main>
 
-<aside class="left">
+<aside class="left" id="leftPanel">
 
 <div class="panel-title">部品</div>
 
@@ -711,7 +769,7 @@ padding:0 6px;
 
 </section>
 
-<aside class="right">
+<aside class="right" id="rightPanel">
 
 <div class="panel-title">設定</div>
 
@@ -761,7 +819,7 @@ JS
 
 </div>
 
-<button onclick="copyCode()">コピー</button>
+<button class="modal-copy" onclick="copyCode()">コピー</button>
 
 <button class="modal-close" onclick="closeCode()">閉じる</button>
 
@@ -787,7 +845,7 @@ let historyIndex=-1;
 let customCSS="";
 let customJS="";
 
-let editing=false;
+let currentCodeType="html";
 
 
 function getState(){
@@ -806,7 +864,9 @@ function saveHistory(){
 
 let current=getState();
 
-if(history[historyIndex]===current)return;
+if(history[historyIndex]===current){
+return;
+}
 
 history=history.slice(0,historyIndex+1);
 
@@ -839,7 +899,9 @@ render();
 
 function undo(){
 
-if(historyIndex<=0)return;
+if(historyIndex<=0){
+return;
+}
 
 historyIndex--;
 
@@ -850,7 +912,9 @@ restoreState(history[historyIndex]);
 
 function redo(){
 
-if(historyIndex>=history.length-1)return;
+if(historyIndex>=history.length-1){
+return;
+}
 
 historyIndex++;
 
@@ -900,41 +964,50 @@ e.text="ボタン";
 e.url="#";
 e.background="#1a73e8";
 e.color="#ffffff";
+e.padding=10;
 }
 
 if(type==="link"){
 e.text="リンク";
 e.url="https://example.com";
+e.color="#1a73e8";
 }
 
 if(type==="image"){
 e.src="";
 e.alt="画像";
+e.padding=0;
 }
 
 if(type==="video"){
 e.src="";
+e.padding=0;
 }
 
 if(type==="youtube"){
 e.src="";
+e.padding=0;
 }
 
 if(type==="input"){
 e.placeholder="入力してください";
+e.padding=10;
 }
 
 if(type==="textarea"){
 e.placeholder="文章を入力してください";
 e.height="120px";
+e.padding=10;
 }
 
 if(type==="checkbox"){
 e.text="同意する";
+e.padding=5;
 }
 
 if(type==="radio"){
 e.text="選択肢";
+e.padding=5;
 }
 
 if(type==="select"){
@@ -947,6 +1020,8 @@ e.text="項目1,項目2,項目3";
 
 if(type==="table"){
 e.text="名前,年齢,地域\nひろ,15,日本\nユーザー,20,東京";
+e.border="solid";
+e.padding=5;
 }
 
 if(type==="card"){
@@ -965,14 +1040,17 @@ e.height="100px";
 
 if(type==="line"){
 e.margin=15;
+e.padding=0;
 }
 
 if(type==="space"){
 e.height="30px";
+e.padding=0;
 }
 
 if(type==="html"){
 e.text="<div>HTML</div>";
+e.padding=0;
 }
 
 return e;
@@ -1020,7 +1098,9 @@ saveHistory();
 
 let index=elements.findIndex(e=>e.id===id);
 
-if(index===-1)return;
+if(index===-1){
+return;
+}
 
 let copy=JSON.parse(JSON.stringify(elements[index]));
 
@@ -1039,11 +1119,15 @@ function moveElement(id,direction){
 
 let index=elements.findIndex(e=>e.id===id);
 
-if(index===-1)return;
+if(index===-1){
+return;
+}
 
 let target=index+direction;
 
-if(target<0||target>=elements.length)return;
+if(target<0||target>=elements.length){
+return;
+}
 
 saveHistory();
 
@@ -1181,25 +1265,38 @@ function getElementHTML(e){
 let s=getStyle(e);
 
 if(e.type==="heading"){
-return `<${e.level} style="${s}">${esc(e.text)}</${e.level}>`;
+
+return `<${e.level} style="${s}">${esc(e.text).replace(/\n/g,"<br>")}</${e.level}>`;
+
 }
 
 if(e.type==="text"){
+
 return `<p style="${s}">${esc(e.text).replace(/\n/g,"<br>")}</p>`;
+
 }
 
 if(e.type==="button"){
-return `<button type="button" style="${s}" onclick="location.href='${attr(e.url)}'">${esc(e.text)}</button>`;
+
+return `<button type="button" style="${s}" onclick="location.href='${jsAttr(e.url)}'">${esc(e.text)}</button>`;
+
 }
 
 if(e.type==="link"){
+
 return `<a href="${attr(e.url)}" style="${s}">${esc(e.text)}</a>`;
+
 }
 
 if(e.type==="image"){
 
 if(!e.src){
-return `<div style="${s};min-height:100px;background:#eee;display:flex;align-items:center;justify-content:center">画像URLを設定してください</div>`;
+
+return `
+<div style="${s};min-height:100px;background:#eee;display:flex;align-items:center;justify-content:center">
+画像URLを設定してください
+</div>`;
+
 }
 
 return `<img src="${attr(e.src)}" alt="${attr(e.alt)}" style="${s};max-width:100%;height:auto">`;
@@ -1207,7 +1304,9 @@ return `<img src="${attr(e.src)}" alt="${attr(e.alt)}" style="${s};max-width:100
 }
 
 if(e.type==="video"){
+
 return `<video src="${attr(e.src)}" controls style="${s};max-width:100%"></video>`;
+
 }
 
 if(e.type==="youtube"){
@@ -1215,34 +1314,61 @@ if(e.type==="youtube"){
 let id=getYoutubeId(e.src);
 
 if(!id){
-return `<div style="${s};min-height:100px;background:#eee;display:flex;align-items:center;justify-content:center">YouTube URLを設定してください</div>`;
+
+return `
+<div style="${s};min-height:100px;background:#eee;display:flex;align-items:center;justify-content:center">
+YouTube URLを設定してください
+</div>`;
+
 }
 
-return `<iframe src="https://www.youtube.com/embed/${id}" style="${s};height:315px;border:0" allowfullscreen></iframe>`;
+return `
+<iframe
+src="https://www.youtube.com/embed/${attr(id)}"
+style="${s};height:315px;border:0"
+allowfullscreen>
+</iframe>`;
 
 }
 
 if(e.type==="input"){
+
 return `<input type="text" placeholder="${attr(e.placeholder)}" style="${s}">`;
+
 }
 
 if(e.type==="textarea"){
+
 return `<textarea placeholder="${attr(e.placeholder)}" style="${s}"></textarea>`;
+
 }
 
 if(e.type==="checkbox"){
-return `<label style="${s};display:block"><input type="checkbox"> ${esc(e.text)}</label>`;
+
+return `
+<label style="${s};display:block">
+<input type="checkbox"> ${esc(e.text)}
+</label>`;
+
 }
 
 if(e.type==="radio"){
-return `<label style="${s};display:block"><input type="radio" name="radio-group"> ${esc(e.text)}</label>`;
+
+return `
+<label style="${s};display:block">
+<input type="radio" name="radio-group"> ${esc(e.text)}
+</label>`;
+
 }
 
 if(e.type==="select"){
 
 let list=e.text.split(",").filter(x=>x.trim());
 
-return `<select style="${s}">${list.map(x=>`<option>${esc(x.trim())}</option>`).join("")}</select>`;
+return `
+<select style="${s}">
+${list.map(x=>`<option>${esc(x.trim())}</option>`).join("")}
+</select>`;
 
 }
 
@@ -1250,7 +1376,10 @@ if(e.type==="list"){
 
 let list=e.text.split(",").filter(x=>x.trim());
 
-return `<ul style="${s}">${list.map(x=>`<li>${esc(x.trim())}</li>`).join("")}</ul>`;
+return `
+<ul style="${s}">
+${list.map(x=>`<li>${esc(x.trim())}</li>`).join("")}
+</ul>`;
 
 }
 
@@ -1258,13 +1387,32 @@ if(e.type==="table"){
 
 let rows=e.text.split("\n");
 
-return `<table style="${s};border-collapse:collapse">
+return `
+<table style="${s};border-collapse:collapse">
 ${rows.map((row,index)=>`
 <tr>
 ${row.split(",").map(cell=>{
-return index===0
-?`<th style="border:1px solid ${e.borderColor};padding:8px">${esc(cell.trim())}</th>`
-:`<td style="border:1px solid ${e.borderColor};padding:8px">${esc(cell.trim())}</td>`;
+
+if(index===0){
+
+return `
+<th style="
+border:1px solid ${e.borderColor};
+padding:8px;
+">
+${esc(cell.trim())}
+</th>`;
+
+}
+
+return `
+<td style="
+border:1px solid ${e.borderColor};
+padding:8px;
+">
+${esc(cell.trim())}
+</td>`;
+
 }).join("")}
 </tr>
 `).join("")}
@@ -1276,7 +1424,8 @@ if(e.type==="card"){
 
 let lines=e.text.split("\n");
 
-return `<div style="${s}">
+return `
+<div style="${s}">
 <strong>${esc(lines[0]||"")}</strong>
 <p>${esc(lines.slice(1).join("\n")).replace(/\n/g,"<br>")}</p>
 </div>`;
@@ -1284,19 +1433,35 @@ return `<div style="${s}">
 }
 
 if(e.type==="container"){
-return `<div style="${s};min-height:50px">コンテナ</div>`;
+
+return `
+<div style="${s};min-height:50px">
+コンテナ
+</div>`;
+
 }
 
 if(e.type==="line"){
-return `<hr style="border:0;border-top:${e.borderWidth}px solid ${e.borderColor};margin:${e.margin}px 0">`;
+
+return `
+<hr style="
+border:0;
+border-top:${e.borderWidth}px solid ${e.borderColor};
+margin:${e.margin}px 0;
+">`;
+
 }
 
 if(e.type==="space"){
+
 return `<div style="height:${e.height||"30px"}"></div>`;
+
 }
 
 if(e.type==="html"){
+
 return e.text;
+
 }
 
 return "";
@@ -1322,12 +1487,16 @@ return;
 
 let e=elements.find(x=>x.id===selectedId);
 
-if(!e)return;
+if(!e){
+return;
+}
 
 let html="";
 
-html+=`<div class="setting-section">
-<div class="setting-title">内容</div>`;
+html+=`
+<div class="setting-section">
+<div class="setting-title">内容</div>
+`;
 
 if(e.type==="heading"){
 
@@ -1342,7 +1511,8 @@ html+=`
 <option value="h5">H5</option>
 <option value="h6">H6</option>
 </select>
-</div>`;
+</div>
+`;
 
 }
 
@@ -1352,7 +1522,8 @@ html+=`
 <div class="field">
 <label>${e.type==="table"?"表データ":"内容"}</label>
 <textarea data-key="text">${escText(e.text)}</textarea>
-</div>`;
+</div>
+`;
 
 }
 
@@ -1362,7 +1533,8 @@ html+=`
 <div class="field">
 <label>リンクURL</label>
 <input type="url" data-key="url" value="${attr(e.url)}">
-</div>`;
+</div>
+`;
 
 }
 
@@ -1377,7 +1549,8 @@ html+=`
 <div class="field">
 <label>代替テキスト</label>
 <input type="text" data-key="alt" value="${attr(e.alt)}">
-</div>`;
+</div>
+`;
 
 }
 
@@ -1387,7 +1560,8 @@ html+=`
 <div class="field">
 <label>動画URL</label>
 <input type="url" data-key="src" value="${attr(e.src)}">
-</div>`;
+</div>
+`;
 
 }
 
@@ -1397,7 +1571,8 @@ html+=`
 <div class="field">
 <label>YouTube URL</label>
 <input type="url" data-key="src" value="${attr(e.src)}">
-</div>`;
+</div>
+`;
 
 }
 
@@ -1407,13 +1582,14 @@ html+=`
 <div class="field">
 <label>プレースホルダー</label>
 <input type="text" data-key="placeholder" value="${attr(e.placeholder)}">
-</div>`;
+</div>
+`;
 
 }
 
-html+=`</div>`;
-
 html+=`
+</div>
+
 <div class="setting-section">
 
 <div class="setting-title">文字</div>
@@ -1448,9 +1624,8 @@ html+=`
 </select>
 </div>
 
-</div>`;
+</div>
 
-html+=`
 <div class="setting-section">
 
 <div class="setting-title">背景</div>
@@ -1468,9 +1643,8 @@ html+=`
 </div>
 </div>
 
-</div>`;
+</div>
 
-html+=`
 <div class="setting-section">
 
 <div class="setting-title">枠線</div>
@@ -1509,9 +1683,8 @@ html+=`
 影を付ける
 </label>
 
-</div>`;
+</div>
 
-html+=`
 <div class="setting-section">
 
 <div class="setting-title">サイズ・余白</div>
@@ -1540,9 +1713,8 @@ html+=`
 
 </div>
 
-</div>`;
+</div>
 
-html+=`
 <div class="setting-section">
 
 <div class="action-row">
@@ -1555,7 +1727,8 @@ html+=`
 <button class="action red" onclick="deleteElement(${e.id})">削除</button>
 </div>
 
-</div>`;
+</div>
+`;
 
 box.innerHTML=html;
 
@@ -1573,17 +1746,42 @@ inputs.forEach(input=>{
 let key=input.dataset.key;
 
 if(input.type==="checkbox"){
+
 input.checked=Boolean(e[key]);
+
 }else{
+
 input.value=e[key]??"";
+
 }
+
+input.addEventListener("focus",function(){
+
+input.dataset.before=getState();
+
+});
 
 input.addEventListener("input",function(){
 
 if(input.type==="checkbox"){
+
 e[key]=input.checked;
+
+}else if(
+key==="fontSize"||
+key==="padding"||
+key==="margin"||
+key==="borderWidth"||
+key==="borderRadius"||
+key==="opacity"
+){
+
+e[key]=Number(input.value);
+
 }else{
+
 e[key]=input.value;
+
 }
 
 renderCanvas();
@@ -1594,7 +1792,21 @@ updateRangeLabel(input,e[key],key);
 
 input.addEventListener("change",function(){
 
-saveHistory();
+let before=input.dataset.before;
+
+if(before&&before!==getState()){
+
+history=history.slice(0,historyIndex+1);
+
+history.push(getState());
+
+if(history.length>50){
+history.shift();
+}
+
+historyIndex=history.length-1;
+
+}
 
 });
 
@@ -1605,15 +1817,25 @@ saveHistory();
 
 function updateRangeLabel(input,value,key){
 
-if(input.type!=="range")return;
+if(input.type!=="range"){
+return;
+}
 
 let span=input.parentElement.querySelector("span");
 
-if(!span)return;
+if(!span){
+return;
+}
 
-span.textContent=key==="fontSize"
-?value+"px"
-:value;
+if(key==="fontSize"){
+
+span.textContent=value+"px";
+
+}else{
+
+span.textContent=value;
+
+}
 
 }
 
@@ -1653,6 +1875,89 @@ document.getElementById("desktop").classList.add("active");
 }
 
 
+function mobileParts(){
+
+let left=document.getElementById("leftPanel");
+let right=document.getElementById("rightPanel");
+let overlay=document.getElementById("mobileOverlay");
+
+right.style.display="none";
+
+if(left.style.display==="block"){
+
+closeMobilePanels();
+
+return;
+
+}
+
+left.style.display="block";
+
+overlay.classList.add("show");
+
+}
+
+
+function mobileSettings(){
+
+let left=document.getElementById("leftPanel");
+let right=document.getElementById("rightPanel");
+let overlay=document.getElementById("mobileOverlay");
+
+left.style.display="none";
+
+if(right.style.display==="block"){
+
+closeMobilePanels();
+
+return;
+
+}
+
+right.style.display="block";
+
+overlay.classList.add("show");
+
+}
+
+
+function openMobileSettings(){
+
+if(window.innerWidth>600){
+return;
+}
+
+let left=document.getElementById("leftPanel");
+let right=document.getElementById("rightPanel");
+let overlay=document.getElementById("mobileOverlay");
+
+left.style.display="none";
+
+right.style.display="block";
+
+overlay.classList.add("show");
+
+}
+
+
+function closeMobilePanels(){
+
+let left=document.getElementById("leftPanel");
+let right=document.getElementById("rightPanel");
+let overlay=document.getElementById("mobileOverlay");
+
+if(window.innerWidth<=600){
+
+left.style.display="none";
+right.style.display="none";
+
+}
+
+overlay.classList.remove("show");
+
+}
+
+
 function getFullHTML(){
 
 let body=elements.map(e=>getElementHTML(e)).join("\n");
@@ -1664,31 +1969,81 @@ return `<!DOCTYPE html>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>My Website</title>
 <style>
-*{box-sizing:border-box}
-body{
+*{
+box-sizing:border-box;
+}
+
+html,body{
 margin:0;
+padding:0;
+}
+
+body{
 padding:30px;
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
 }
+
 img,video,iframe{
 max-width:100%;
 }
+
 button,input,textarea,select{
 font-family:inherit;
 }
+
 ${customCSS}
+
 </style>
 </head>
+
 <body>
 
 ${body}
 
 <script>
+
 ${customJS}
+
 <\/script>
 
 </body>
 </html>`;
+
+}
+
+
+function getCSS(){
+
+return `*{
+box-sizing:border-box;
+}
+
+html,body{
+margin:0;
+padding:0;
+}
+
+body{
+padding:30px;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
+
+img,video,iframe{
+max-width:100%;
+}
+
+button,input,textarea,select{
+font-family:inherit;
+}
+
+${customCSS}`;
+
+}
+
+
+function getJS(){
+
+return customJS||"";
 
 }
 
@@ -1704,4 +2059,272 @@ showCode("html");
 
 function closeCode(){
 
-document.getElementById
+document.getElementById("codeModal").classList.remove("show");
+
+}
+
+
+function showCode(type){
+
+currentCodeType=type;
+
+let code=document.getElementById("code");
+
+let htmlTab=document.getElementById("tabHTML");
+let cssTab=document.getElementById("tabCSS");
+let jsTab=document.getElementById("tabJS");
+
+htmlTab.classList.remove("active");
+cssTab.classList.remove("active");
+jsTab.classList.remove("active");
+
+if(type==="html"){
+
+code.value=getFullHTML();
+
+htmlTab.classList.add("active");
+
+}
+
+if(type==="css"){
+
+code.value=getCSS();
+
+cssTab.classList.add("active");
+
+}
+
+if(type==="js"){
+
+code.value=getJS();
+
+jsTab.classList.add("active");
+
+}
+
+}
+
+
+async function copyCode(){
+
+let code=document.getElementById("code").value;
+
+try{
+
+await navigator.clipboard.writeText(code);
+
+showToast("コピーしました");
+
+}catch(e){
+
+let textarea=document.getElementById("code");
+
+textarea.removeAttribute("readonly");
+textarea.select();
+
+document.execCommand("copy");
+
+textarea.setAttribute("readonly","");
+
+showToast("コピーしました");
+
+}
+
+}
+
+
+function downloadHTML(){
+
+let html=getFullHTML();
+
+let blob=new Blob([html],{
+type:"text/html;charset=utf-8"
+});
+
+let url=URL.createObjectURL(blob);
+
+let a=document.createElement("a");
+
+a.href=url;
+a.download="index.html";
+
+document.body.appendChild(a);
+
+a.click();
+
+a.remove();
+
+setTimeout(()=>{
+URL.revokeObjectURL(url);
+},1000);
+
+showToast("index.htmlを保存しました");
+
+}
+
+
+function newProject(){
+
+if(elements.length>0){
+
+let ok=confirm("現在の内容を削除して新しく作成しますか？");
+
+if(!ok){
+return;
+}
+
+}
+
+elements=[];
+selectedId=null;
+nextId=1;
+customCSS="";
+customJS="";
+
+history=[];
+historyIndex=-1;
+
+saveHistory();
+
+render();
+
+closeMobilePanels();
+
+showToast("新しく作成しました");
+
+}
+
+
+function getYoutubeId(url){
+
+if(!url){
+return "";
+}
+
+try{
+
+let u=new URL(url);
+
+if(u.hostname.includes("youtu.be")){
+
+return u.pathname.replace("/","");
+
+}
+
+if(u.hostname.includes("youtube.com")){
+
+return u.searchParams.get("v")||"";
+
+}
+
+}catch(e){}
+
+return "";
+
+}
+
+
+function esc(value){
+
+return String(value??"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#39;");
+
+}
+
+
+function escText(value){
+
+return String(value??"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;");
+
+}
+
+
+function attr(value){
+
+return String(value??"")
+.replace(/&/g,"&amp;")
+.replace(/"/g,"&quot;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;");
+
+}
+
+
+function jsAttr(value){
+
+return String(value??"")
+.replace(/\\/g,"\\\\")
+.replace(/'/g,"\\'")
+.replace(/\r/g,"\\r")
+.replace(/\n/g,"\\n");
+
+}
+
+
+function showToast(message){
+
+let toast=document.getElementById("toast");
+
+toast.textContent=message;
+
+toast.style.display="block";
+
+clearTimeout(window.toastTimer);
+
+window.toastTimer=setTimeout(()=>{
+
+toast.style.display="none";
+
+},1800);
+
+}
+
+
+document.getElementById("canvas").addEventListener("click",function(){
+
+selectedId=null;
+
+render();
+
+});
+
+
+document.getElementById("codeModal").addEventListener("click",function(event){
+
+if(event.target===this){
+
+closeCode();
+
+}
+
+});
+
+
+window.addEventListener("resize",function(){
+
+if(window.innerWidth>600){
+
+document.getElementById("leftPanel").style.display="";
+document.getElementById("rightPanel").style.display="";
+document.getElementById("mobileOverlay").classList.remove("show");
+
+}
+
+});
+
+
+saveHistory();
+
+render();
+
+</script>
+
+</body>
+</html>
