@@ -2,333 +2,1755 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>HTMLかんたん作成</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f1f3f5;color:#222}
-header{background:#202124;color:white;padding:15px 18px;font-size:20px;font-weight:bold}
-main{display:grid;grid-template-columns:280px 1fr 1fr;gap:15px;padding:15px;max-width:1400px;margin:auto}
-.panel{background:white;border-radius:12px;padding:15px;box-shadow:0 2px 8px #0001}
-h2{font-size:17px;margin:0 0 12px}
-button{border:0;border-radius:8px;padding:10px 12px;background:#222;color:white;font-size:14px;cursor:pointer;margin:3px 0}
-button:hover{opacity:.8}
-.add{width:100%;background:#3b82f6}
-input,select,textarea{width:100%;padding:9px;border:1px solid #ccc;border-radius:7px;font-size:14px;margin:5px 0 10px}
-textarea{height:400px;font-family:monospace;resize:vertical}
-.item{border:1px solid #ddd;border-radius:8px;padding:10px;margin-bottom:8px;background:#fafafa}
-.item strong{display:block;margin-bottom:7px}
-.item button{font-size:12px;padding:6px 9px}
-.delete{background:#d33}
-.move{background:#666}
-#preview{min-height:500px;border:1px solid #ddd;border-radius:8px;background:white;padding:15px}
-#code{height:500px;background:#181818;color:#eee}
-.row{display:flex;gap:5px}
-.row button{flex:1}
-.empty{color:#888;text-align:center;padding:30px 5px}
-@media(max-width:1000px){
-main{grid-template-columns:1fr}
+*{
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
+}
+
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+background:#f1f3f5;
+color:#202124;
+overflow:hidden;
+}
+
+button,input,textarea,select{
+font-family:inherit;
+}
+
+button{
+border:0;
+cursor:pointer;
+}
+
+header{
+height:58px;
+background:#202124;
+color:#fff;
+display:flex;
+align-items:center;
+padding:0 12px;
+gap:8px;
+position:relative;
+z-index:30;
+}
+
+.logo{
+font-weight:700;
+font-size:17px;
+white-space:nowrap;
+}
+
+.top-actions{
+margin-left:auto;
+display:flex;
+gap:5px;
+}
+
+.top-btn{
+height:38px;
+padding:0 12px;
+border-radius:8px;
+background:#3c4043;
+color:#fff;
+font-size:13px;
+}
+
+.top-btn.primary{
+background:#1a73e8;
+}
+
+.top-btn.save{
+background:#188038;
+}
+
+main{
+height:calc(100vh - 58px);
+display:grid;
+grid-template-columns:220px minmax(300px,1fr) 285px;
+}
+
+.left{
+background:#fff;
+border-right:1px solid #ddd;
+overflow:auto;
+}
+
+.center{
+min-width:0;
+background:#e5e7eb;
+display:flex;
+flex-direction:column;
+}
+
+.right{
+background:#fff;
+border-left:1px solid #ddd;
+overflow:auto;
+}
+
+.panel-title{
+height:48px;
+display:flex;
+align-items:center;
+padding:0 14px;
+font-size:14px;
+font-weight:700;
+border-bottom:1px solid #eee;
+background:#fff;
+position:sticky;
+top:0;
+z-index:10;
+}
+
+.parts{
+padding:10px;
+}
+
+.group-title{
+font-size:11px;
+font-weight:700;
+color:#777;
+margin:12px 3px 6px;
+}
+
+.part{
+width:100%;
+height:42px;
+background:#f7f8f9;
+border:1px solid #e1e3e6;
+border-radius:8px;
+margin-bottom:6px;
+text-align:left;
+padding:0 12px;
+font-size:13px;
+display:flex;
+align-items:center;
+gap:9px;
+}
+
+.part:active{
+background:#e8f0fe;
+transform:scale(.98);
+}
+
+.part-icon{
+width:22px;
+text-align:center;
+font-size:16px;
+}
+
+.toolbar{
+height:50px;
+background:#fff;
+border-bottom:1px solid #ddd;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:5px;
+flex-shrink:0;
+}
+
+.device{
+height:34px;
+padding:0 12px;
+border-radius:7px;
+background:#f1f3f4;
+font-size:12px;
+}
+
+.device.active{
+background:#1a73e8;
+color:#fff;
+}
+
+.canvas-area{
+flex:1;
+overflow:auto;
+padding:25px;
+}
+
+.canvas{
+background:#fff;
+min-height:700px;
+width:100%;
+max-width:1000px;
+margin:auto;
+padding:25px;
+box-shadow:0 2px 12px #0002;
+transition:.2s;
+}
+
+.canvas.mobile{
+width:390px;
+max-width:390px;
+}
+
+.canvas.tablet{
+width:768px;
+max-width:768px;
+}
+
+.element{
+position:relative;
+border:2px solid transparent;
+border-radius:4px;
+padding:3px;
+margin:3px 0;
+cursor:pointer;
+}
+
+.element:hover{
+border-color:#8ab4f8;
+}
+
+.element.selected{
+border-color:#1a73e8;
+background:#1a73e80b;
+}
+
+.element-tools{
+position:absolute;
+right:2px;
+top:-34px;
+display:none;
+background:#1a73e8;
+padding:3px;
+border-radius:7px;
+z-index:20;
+gap:2px;
+}
+
+.element.selected .element-tools{
+display:flex;
+}
+
+.element-tools button{
+background:transparent;
+color:#fff;
+font-size:11px;
+padding:6px 7px;
+border-radius:5px;
+}
+
+.element-tools button:active{
+background:#ffffff33;
+}
+
+.empty{
+height:600px;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+color:#999;
+font-size:14px;
+border:2px dashed #ddd;
+border-radius:10px;
+}
+
+.settings{
+padding-bottom:30px;
+}
+
+.setting-section{
+border-bottom:1px solid #eee;
+padding:13px;
+}
+
+.setting-title{
+font-size:13px;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.field{
+margin-bottom:10px;
+}
+
+.field label{
+display:block;
+font-size:11px;
+font-weight:600;
+color:#666;
+margin-bottom:4px;
+}
+
+input[type=text],
+input[type=url],
+input[type=number],
+select,
+textarea{
+width:100%;
+border:1px solid #d0d3d7;
+border-radius:7px;
+padding:9px;
+font-size:13px;
+background:#fff;
+outline:none;
+}
+
+textarea{
+min-height:90px;
+resize:vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+border-color:#1a73e8;
+box-shadow:0 0 0 2px #1a73e822;
+}
+
+input[type=color]{
+width:100%;
+height:38px;
+padding:3px;
+border:1px solid #d0d3d7;
+border-radius:7px;
+background:#fff;
+}
+
+.range{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.range input{
+flex:1;
+}
+
+.range span{
+font-size:11px;
+min-width:42px;
+text-align:right;
+}
+
+.two{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:7px;
+}
+
+.action-row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:6px;
+margin-top:8px;
+}
+
+.action{
+height:36px;
+border-radius:7px;
+background:#f1f3f4;
+font-size:12px;
+}
+
+.action.blue{
+background:#1a73e8;
+color:#fff;
+}
+
+.action.red{
+background:#d93025;
+color:#fff;
+}
+
+.no-selection{
+padding:25px 15px;
+text-align:center;
+color:#888;
+font-size:13px;
+line-height:1.7;
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:#0008;
+z-index:100;
+display:none;
+align-items:center;
+justify-content:center;
+padding:15px;
+}
+
+.modal.show{
+display:flex;
+}
+
+.modal-box{
+width:min(1000px,100%);
+height:min(800px,100%);
+background:#fff;
+border-radius:12px;
+overflow:hidden;
+display:flex;
+flex-direction:column;
+}
+
+.modal-header{
+height:50px;
+padding:0 12px;
+display:flex;
+align-items:center;
+border-bottom:1px solid #ddd;
+gap:5px;
+}
+
+.modal-header strong{
+flex:1;
+font-size:14px;
+}
+
+.code-tabs{
+display:flex;
+gap:4px;
+}
+
+.code-tab{
+padding:7px 10px;
+border-radius:6px;
+background:#f1f3f4;
+font-size:12px;
+}
+
+.code-tab.active{
+background:#1a73e8;
+color:#fff;
+}
+
+.code{
+flex:1;
+width:100%;
+border:0;
+border-radius:0;
+background:#171717;
+color:#eee;
+padding:15px;
+font-family:monospace;
+font-size:12px;
+line-height:1.5;
+resize:none;
+}
+
+.close{
+background:#d93025;
+color:#fff;
+padding:7px 10px;
+border-radius:6px;
+font-size:12px;
+}
+
+.toast{
+position:fixed;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+background:#202124;
+color:#fff;
+padding:10px 16px;
+border-radius:8px;
+font-size:13px;
+display:none;
+z-index:200;
+}
+
+.mobile-bottom{
+display:none;
+}
+
+@media(max-width:900px){
+
+main{
+grid-template-columns:180px 1fr;
+}
+
+.right{
+display:none;
+}
+
+}
+
+@media(max-width:600px){
+
+body{
+overflow:hidden;
+}
+
+header{
+height:56px;
+}
+
+.logo{
+font-size:15px;
+}
+
+.top-actions{
+gap:3px;
+}
+
+.top-btn{
+font-size:11px;
+padding:0 8px;
+}
+
+.top-btn:nth-child(1),
+.top-btn:nth-child(2){
+display:none;
+}
+
+main{
+height:calc(100vh - 56px);
+display:block;
+position:relative;
+}
+
+.left{
+display:none;
+}
+
+.center{
+height:100%;
+}
+
+.right{
+display:none;
+}
+
+.toolbar{
+height:48px;
+}
+
+.device{
+padding:0 9px;
+font-size:11px;
+}
+
+.canvas-area{
+padding:10px;
+padding-bottom:70px;
+}
+
+.canvas{
+padding:15px;
+min-height:calc(100vh - 130px);
+}
+
+.canvas.mobile{
+width:100%;
+max-width:none;
+}
+
+.mobile-bottom{
+position:fixed;
+display:flex;
+bottom:0;
+left:0;
+right:0;
+height:62px;
+background:#fff;
+border-top:1px solid #ddd;
+z-index:50;
+padding:7px;
+gap:6px;
+}
+
+.mobile-bottom button{
+flex:1;
+background:#f1f3f4;
+border-radius:8px;
+font-size:11px;
+}
+
+.mobile-bottom button.active{
+background:#1a73e8;
+color:#fff;
+}
+
+.element-tools{
+top:-38px;
+}
+
+}
+
+@media(max-width:380px){
+
+.top-btn{
+padding:0 6px;
+}
+
+.logo{
+font-size:14px;
+}
+
 }
 </style>
 </head>
 
 <body>
 
-<header>HTMLかんたん作成</header>
+<header>
+
+<div class="logo">HTMLかんたん作成</div>
+
+<div class="top-actions">
+<button class="top-btn" onclick="undo()">↶</button>
+<button class="top-btn" onclick="redo()">↷</button>
+<button class="top-btn" onclick="newProject()">新規</button>
+<button class="top-btn primary" onclick="openCode()">HTML</button>
+<button class="top-btn save" onclick="downloadHTML()">保存</button>
+</div>
+
+</header>
 
 <main>
 
-<div class="panel">
-<h2>部品を追加</h2>
+<aside class="left">
 
-<button class="add" onclick="addElement('heading')">＋ 見出し</button>
-<button class="add" onclick="addElement('text')">＋ 文章</button>
-<button class="add" onclick="addElement('button')">＋ ボタン</button>
-<button class="add" onclick="addElement('link')">＋ リンク</button>
-<button class="add" onclick="addElement('image')">＋ 画像</button>
-<button class="add" onclick="addElement('input')">＋ 入力欄</button>
-<button class="add" onclick="addElement('line')">＋ 区切り線</button>
-<button class="add" onclick="addElement('space')">＋ 空白</button>
+<div class="panel-title">部品</div>
 
-<h2 style="margin-top:20px">ページ設定</h2>
+<div class="parts">
 
-<label>タイトル</label>
-<input id="pageTitle" value="My Website" oninput="update()">
+<div class="group-title">基本</div>
 
-<label>背景色</label>
-<input id="bgColor" type="color" value="#ffffff" oninput="update()">
+<button class="part" onclick="addElement('heading')">
+<span class="part-icon">H</span>見出し
+</button>
 
-<label>文字色</label>
-<input id="textColor" type="color" value="#222222" oninput="update()">
+<button class="part" onclick="addElement('text')">
+<span class="part-icon">T</span>文章
+</button>
+
+<button class="part" onclick="addElement('button')">
+<span class="part-icon">▣</span>ボタン
+</button>
+
+<button class="part" onclick="addElement('link')">
+<span class="part-icon">🔗</span>リンク
+</button>
+
+<button class="part" onclick="addElement('image')">
+<span class="part-icon">🖼</span>画像
+</button>
+
+<button class="part" onclick="addElement('video')">
+<span class="part-icon">▶</span>動画
+</button>
+
+<button class="part" onclick="addElement('youtube')">
+<span class="part-icon">▶</span>YouTube
+</button>
+
+
+<div class="group-title">フォーム</div>
+
+<button class="part" onclick="addElement('input')">
+<span class="part-icon">▭</span>入力欄
+</button>
+
+<button class="part" onclick="addElement('textarea')">
+<span class="part-icon">▤</span>文章入力
+</button>
+
+<button class="part" onclick="addElement('checkbox')">
+<span class="part-icon">☑</span>チェック
+</button>
+
+<button class="part" onclick="addElement('radio')">
+<span class="part-icon">◉</span>ラジオ
+</button>
+
+<button class="part" onclick="addElement('select')">
+<span class="part-icon">▾</span>選択
+</button>
+
+
+<div class="group-title">レイアウト</div>
+
+<button class="part" onclick="addElement('card')">
+<span class="part-icon">▣</span>カード
+</button>
+
+<button class="part" onclick="addElement('container')">
+<span class="part-icon">□</span>コンテナ
+</button>
+
+<button class="part" onclick="addElement('list')">
+<span class="part-icon">☷</span>リスト
+</button>
+
+<button class="part" onclick="addElement('table')">
+<span class="part-icon">▦</span>表
+</button>
+
+<button class="part" onclick="addElement('line')">
+<span class="part-icon">―</span>区切り線
+</button>
+
+<button class="part" onclick="addElement('space')">
+<span class="part-icon">↕</span>空白
+</button>
+
+<button class="part" onclick="addElement('html')">
+<span class="part-icon">&lt;&gt;</span>HTML
+</button>
 
 </div>
 
-<div class="panel">
-<h2>配置</h2>
-<div id="elements"></div>
+</aside>
+
+
+<section class="center">
+
+<div class="toolbar">
+
+<button class="device active" id="desktop" onclick="setDevice('desktop')">🖥 PC</button>
+
+<button class="device" id="tablet" onclick="setDevice('tablet')">▣ タブレット</button>
+
+<button class="device" id="mobile" onclick="setDevice('mobile')">📱 スマホ</button>
+
 </div>
 
-<div class="panel">
-<h2>プレビュー</h2>
-<div id="preview"></div>
+<div class="canvas-area">
 
-<h2 style="margin-top:20px">HTML</h2>
-<textarea id="code" readonly></textarea>
+<div id="canvas" class="canvas">
 
-<div class="row">
-<button onclick="copyCode()">コピー</button>
-<button onclick="downloadHTML()">HTMLを保存</button>
+<div class="empty">
+左側の「部品」から<br>
+追加したいものをタップしてください
 </div>
+
 </div>
+
+</div>
+
+</section>
+
+
+<aside class="right">
+
+<div class="panel-title">設定</div>
+
+<div id="settings">
+
+<div class="no-selection">
+部品を選択すると<br>
+ここに設定が表示されます
+</div>
+
+</div>
+
+</aside>
 
 </main>
 
+
+<div class="mobile-bottom">
+
+<button onclick="mobileParts()">＋ 部品</button>
+<button onclick="mobileSettings()">⚙ 設定</button>
+<button onclick="openCode()">HTML</button>
+<button onclick="downloadHTML()">保存</button>
+
+</div>
+
+
+<div class="modal" id="codeModal">
+
+<div class="modal-box">
+
+<div class="modal-header">
+
+<strong>生成コード</strong>
+
+<div class="code-tabs">
+
+<button class="code-tab active" id="tabHTML" onclick="showCode('html')">HTML</button>
+
+<button class="code-tab" id="tabCSS" onclick="showCode('css')">CSS</button>
+
+<button class="code-tab" id="tabJS" onclick="showCode('js')">JS</button>
+
+</div>
+
+<button onclick="copyCode()">コピー</button>
+
+<button class="close" onclick="closeCode()">閉じる</button>
+
+</div>
+
+<textarea id="code" class="code" readonly></textarea>
+
+</div>
+
+</div>
+
+
+<div id="toast" class="toast"></div>
+
+
 <script>
+
 let elements=[];
+let selectedId=null;
 let nextId=1;
 
-function addElement(type){
+let history=[];
+let historyIndex=-1;
+
+let customCSS="";
+let customJS="";
+
+
+function state(){
+
+return JSON.stringify({
+elements,
+nextId,
+customCSS,
+customJS
+});
+
+}
+
+
+function saveHistory(){
+
+let s=state();
+
+if(history[historyIndex]===s)return;
+
+history=history.slice(0,historyIndex+1);
+
+history.push(s);
+
+if(history.length>40){
+history.shift();
+}
+
+historyIndex=history.length-1;
+
+}
+
+
+function restore(s){
+
+let data=JSON.parse(s);
+
+elements=data.elements||[];
+nextId=data.nextId||1;
+customCSS=data.customCSS||"";
+customJS=data.customJS||"";
+
+selectedId=null;
+
+render();
+
+}
+
+
+function undo(){
+
+if(historyIndex<=0)return;
+
+historyIndex--;
+
+restore(history[historyIndex]);
+
+}
+
+
+function redo(){
+
+if(historyIndex>=history.length-1)return;
+
+historyIndex++;
+
+restore(history[historyIndex]);
+
+}
+
+
+function createElement(type){
+
 let e={
 id:nextId++,
-type:type,
+type,
 text:"",
 url:"",
 src:"",
-placeholder:""
+alt:"",
+placeholder:"",
+level:"h1",
+color:"#222222",
+background:"#ffffff",
+fontSize:16,
+fontWeight:"normal",
+textAlign:"left",
+width:"100%",
+height:"",
+padding:10,
+margin:5,
+border:"none",
+borderWidth:1,
+borderColor:"#cccccc",
+borderRadius:6,
+shadow:false,
+opacity:1
 };
 
-if(type==="heading")e.text="見出し";
-if(type==="text")e.text="ここに文章を入力";
-if(type==="button")e.text="ボタン";
+if(type==="heading"){
+e.text="見出し";
+}
+
+if(type==="text"){
+e.text="ここに文章を入力してください。";
+}
+
+if(type==="button"){
+e.text="ボタン";
+e.url="#";
+e.background="#1a73e8";
+e.color="#ffffff";
+}
+
 if(type==="link"){
 e.text="リンク";
 e.url="https://example.com";
 }
+
 if(type==="image"){
-e.src="https://via.placeholder.com/400x200";
+e.src="https://via.placeholder.com/600x300";
+e.alt="画像";
 }
+
+if(type==="video"){
+e.src="";
+}
+
+if(type==="youtube"){
+e.src="";
+}
+
 if(type==="input"){
 e.placeholder="入力してください";
 }
 
-elements.push(e);
-render();
+if(type==="textarea"){
+e.placeholder="文章を入力してください";
+e.height="120px";
 }
 
-function removeElement(id){
-elements=elements.filter(e=>e.id!==id);
-render();
+if(type==="checkbox"){
+e.text="同意する";
 }
+
+if(type==="radio"){
+e.text="選択肢";
+}
+
+if(type==="select"){
+e.text="選択肢1,選択肢2,選択肢3";
+}
+
+if(type==="list"){
+e.text="項目1,項目2,項目3";
+}
+
+if(type==="table"){
+e.text="名前,年齢,地域\nひろ,15,日本\nユーザー,20,東京";
+}
+
+if(type==="card"){
+e.text="カードタイトル\nカードの説明です。";
+e.background="#f5f5f5";
+e.padding=20;
+e.border="solid";
+}
+
+if(type==="container"){
+e.background="#fafafa";
+e.padding=20;
+e.border="solid";
+e.height="100px";
+}
+
+if(type==="line"){
+e.margin=15;
+}
+
+if(type==="space"){
+e.height="30px";
+}
+
+if(type==="html"){
+e.text="<div>HTML</div>";
+}
+
+return e;
+
+}
+
+
+function addElement(type){
+
+saveHistory();
+
+let e=createElement(type);
+
+elements.push(e);
+
+selectedId=e.id;
+
+render();
+
+if(window.innerWidth<=600){
+mobileSettings();
+}
+
+}
+
+
+function deleteElement(id){
+
+saveHistory();
+
+elements=elements.filter(e=>e.id!==id);
+
+if(selectedId===id){
+selectedId=null;
+}
+
+render();
+
+}
+
+
+function duplicateElement(id){
+
+saveHistory();
+
+let index=elements.findIndex(e=>e.id===id);
+
+if(index<0)return;
+
+let copy=JSON.parse(JSON.stringify(elements[index]));
+
+copy.id=nextId++;
+
+elements.splice(index+1,0,copy);
+
+selectedId=copy.id;
+
+render();
+
+}
+
 
 function moveElement(id,direction){
+
 let index=elements.findIndex(e=>e.id===id);
-let newIndex=index+direction;
 
-if(newIndex<0||newIndex>=elements.length)return;
+if(index<0)return;
 
-[elements[index],elements[newIndex]]=[
-elements[newIndex],
+let target=index+direction;
+
+if(target<0||target>=elements.length)return;
+
+saveHistory();
+
+[elements[index],elements[target]]=[
+elements[target],
 elements[index]
 ];
 
 render();
+
 }
 
-function editElement(id,key,value){
-let e=elements.find(x=>x.id===id);
-if(e)e[key]=value;
-update();
-}
 
 function render(){
-let container=document.getElementById("elements");
 
-if(elements.length===0){
-container.innerHTML='<div class="empty">左から部品を追加してください</div>';
-update();
-return;
+renderCanvas();
+renderSettings();
+
 }
 
-container.innerHTML="";
 
-elements.forEach((e,index)=>{
+function renderCanvas(){
 
-let div=document.createElement("div");
-div.className="item";
+let canvas=document.getElementById("canvas");
 
-let title={
-heading:"見出し",
-text:"文章",
-button:"ボタン",
-link:"リンク",
-image:"画像",
-input:"入力欄",
-line:"区切り線",
-space:"空白"
-}[e.type];
+if(elements.length===0){
 
-div.innerHTML="<strong>"+(index+1)+". "+title+"</strong>";
+canvas.innerHTML=`
+<div class="empty">
+左側の「部品」から<br>
+追加したいものをタップしてください
+</div>`;
+
+return;
+
+}
+
+canvas.innerHTML="";
+
+elements.forEach(e=>{
+
+let wrapper=document.createElement("div");
+
+wrapper.className="element";
+
+if(e.id===selectedId){
+wrapper.classList.add("selected");
+}
+
+wrapper.draggable=true;
+
+wrapper.addEventListener("dragstart",ev=>{
+ev.dataTransfer.setData("id",e.id);
+});
+
+wrapper.addEventListener("dragover",ev=>{
+ev.preventDefault();
+});
+
+wrapper.addEventListener("drop",ev=>{
+
+ev.preventDefault();
+
+let from=Number(ev.dataTransfer.getData("id"));
+
+if(!from||from===e.id)return;
+
+let fromIndex=elements.findIndex(x=>x.id===from);
+let toIndex=elements.findIndex(x=>x.id===e.id);
+
+if(fromIndex<0||toIndex<0)return;
+
+saveHistory();
+
+let item=elements.splice(fromIndex,1)[0];
+
+elements.splice(toIndex,0,item);
+
+render();
+
+});
+
+wrapper.onclick=ev=>{
+
+ev.stopPropagation();
+
+selectedId=e.id;
+
+render();
+
+};
+
+
+let tools=document.createElement("div");
+
+tools.className="element-tools";
+
+tools.innerHTML=`
+<button onclick="event.stopPropagation();moveElement(${e.id},-1)">↑</button>
+<button onclick="event.stopPropagation();moveElement(${e.id},1)">↓</button>
+<button onclick="event.stopPropagation();duplicateElement(${e.id})">複製</button>
+<button onclick="event.stopPropagation();deleteElement(${e.id})">削除</button>
+`;
+
+wrapper.appendChild(tools);
+
+let content=document.createElement("div");
+
+content.innerHTML=elementPreview(e);
+
+wrapper.appendChild(content);
+
+canvas.appendChild(wrapper);
+
+});
+
+}
+
+
+function styleString(e){
+
+return `
+color:${e.color};
+background:${e.background};
+font-size:${e.fontSize}px;
+font-weight:${e.fontWeight};
+text-align:${e.textAlign};
+width:${e.width};
+${e.height?`height:${e.height};`:""}
+padding:${e.padding}px;
+margin:${e.margin}px;
+border:${e.border};
+border-width:${e.borderWidth}px;
+border-color:${e.borderColor};
+border-radius:${e.borderRadius}px;
+opacity:${e.opacity};
+${e.shadow?"box-shadow:0 4px 16px #0003;":""}
+`;
+
+}
+
+
+function elementPreview(e){
+
+let s=styleString(e);
 
 if(e.type==="heading"){
-div.innerHTML+=`
-<select onchange="editElement(${e.id},'level',this.value)">
+return `<${e.level} style="${s}">${esc(e.text)}</${e.level}>`;
+}
+
+if(e.type==="text"){
+return `<p style="${s}">${esc(e.text).replace(/\n/g,"<br>")}</p>`;
+}
+
+if(e.type==="button"){
+return `<button style="${s}" onclick="location.href='${attr(e.url)}'">${esc(e.text)}</button>`;
+}
+
+if(e.type==="link"){
+return `<a href="${attr(e.url)}" style="${s}">${esc(e.text)}</a>`;
+}
+
+if(e.type==="image"){
+return `<img src="${attr(e.src)}" alt="${attr(e.alt)}" style="${s}max-width:100%;height:auto">`;
+}
+
+if(e.type==="video"){
+return `<video src="${attr(e.src)}" controls style="${s}max-width:100%"></video>`;
+}
+
+if(e.type==="youtube"){
+
+let id=youtubeId(e.src);
+
+if(!id){
+return `<div style="${s}background:#eee;text-align:center">YouTube URLを設定</div>`;
+}
+
+return `<iframe src="https://www.youtube.com/embed/${id}" style="${s}height:315px;border:0" allowfullscreen></iframe>`;
+
+}
+
+if(e.type==="input"){
+return `<input type="text" placeholder="${attr(e.placeholder)}" style="${s}">`;
+}
+
+if(e.type==="textarea"){
+return `<textarea placeholder="${attr(e.placeholder)}" style="${s}"></textarea>`;
+}
+
+if(e.type==="checkbox"){
+return `<label style="${s};display:block"><input type="checkbox"> ${esc(e.text)}</label>`;
+}
+
+if(e.type==="radio"){
+return `<label style="${s};display:block"><input type="radio" name="radio"> ${esc(e.text)}</label>`;
+}
+
+if(e.type==="select"){
+
+let items=e.text.split(",").filter(x=>x.trim());
+
+return `<select style="${s}">${items.map(x=>`<option>${esc(x.trim())}</option>`).join("")}</select>`;
+
+}
+
+if(e.type==="list"){
+
+let items=e.text.split(",").filter(x=>x.trim());
+
+return `<ul style="${s}">${items.map(x=>`<li>${esc(x.trim())}</li>`).join("")}</ul>`;
+
+}
+
+if(e.type==="table"){
+
+let rows=e.text.split("\n");
+
+return `<table style="${s};border-collapse:collapse">
+${rows.map((row,i)=>`
+<tr>
+${row.split(",").map(cell=>
+i===0
+?`<th style="border:1px solid ${e.borderColor};padding:8px">${esc(cell)}</th>`
+:`<td style="border:1px solid ${e.borderColor};padding:8px">${esc(cell)}</td>`
+).join("")}
+</tr>`).join("")}
+</table>`;
+
+}
+
+if(e.type==="card"){
+
+let lines=e.text.split("\n");
+
+return `<div style="${s}">
+<strong>${esc(lines[0]||"")}</strong>
+<p>${esc(lines.slice(1).join("\n")).replace(/\n/g,"<br>")}</p>
+</div>`;
+
+}
+
+if(e.type==="container"){
+return `<div style="${s};min-height:50px">コンテナ</div>`;
+}
+
+if(e.type==="line"){
+return `<hr style="border:0;border-top:${e.borderWidth}px solid ${e.borderColor};margin:${e.margin}px 0">`;
+}
+
+if(e.type==="space"){
+return `<div style="height:${e.height||"30px"}"></div>`;
+}
+
+if(e.type==="html"){
+return e.text;
+}
+
+return "";
+
+}
+
+
+function renderSettings(){
+
+let box=document.getElementById("settings");
+
+if(!selectedId){
+
+box.innerHTML=`
+<div class="no-selection">
+部品を選択すると<br>
+ここに設定が表示されます
+</div>`;
+
+return;
+
+}
+
+let e=elements.find(x=>x.id===selectedId);
+
+if(!e)return;
+
+let html="";
+
+html+=`<div class="setting-section">`;
+
+html+=`<div class="setting-title">内容</div>`;
+
+if(e.type==="heading"){
+
+html+=`
+<div class="field">
+<label>見出し</label>
+<select data-key="level">
 <option value="h1">大見出し</option>
 <option value="h2">中見出し</option>
 <option value="h3">小見出し</option>
 </select>
-<input value="${escapeAttr(e.text)}" oninput="editElement(${e.id},'text',this.value)" placeholder="見出し">
-`;
+</div>`;
+
 }
 
-if(e.type==="text"){
-div.innerHTML+=`
-<textarea style="height:80px" oninput="editElement(${e.id},'text',this.value)" placeholder="文章">${escapeText(e.text)}</textarea>
-`;
+if(["heading","text","button","link","checkbox","radio","card","list","select","table","html"].includes(e.type)){
+
+html+=`
+<div class="field">
+<label>${e.type==="table"?"表データ":"内容"}</label>
+<textarea data-key="text">${escText(e.text)}</textarea>
+</div>`;
+
 }
 
-if(e.type==="button"){
-div.innerHTML+=`
-<input value="${escapeAttr(e.text)}" oninput="editElement(${e.id},'text',this.value)" placeholder="ボタン文字">
-<input value="${escapeAttr(e.url||"")}" oninput="editElement(${e.id},'url',this.value)" placeholder="リンク先URL">
-`;
-}
+if(["button","link"].includes(e.type)){
 
-if(e.type==="link"){
-div.innerHTML+=`
-<input value="${escapeAttr(e.text)}" oninput="editElement(${e.id},'text',this.value)" placeholder="表示文字">
-<input value="${escapeAttr(e.url)}" oninput="editElement(${e.id},'url',this.value)" placeholder="URL">
-`;
+html+=`
+<div class="field">
+<label>リンク先</label>
+<input type="url" data-key="url" value="${attr(e.url)}">
+</div>`;
+
 }
 
 if(e.type==="image"){
-div.innerHTML+=`
-<input value="${escapeAttr(e.src)}" oninput="editElement(${e.id},'src',this.value)" placeholder="画像URL">
-`;
-}
 
-if(e.type==="input"){
-div.innerHTML+=`
-<input value="${escapeAttr(e.placeholder)}" oninput="editElement(${e.id},'placeholder',this.value)" placeholder="プレースホルダー">
-`;
-}
-
-if(e.type==="line"){
-div.innerHTML+="<div style='color:#777'>横線を表示します</div>";
-}
-
-if(e.type==="space"){
-div.innerHTML+="<div style='color:#777'>空白を表示します</div>";
-}
-
-div.innerHTML+=`
-<div class="row">
-<button class="move" onclick="moveElement(${e.id},-1)">↑</button>
-<button class="move" onclick="moveElement(${e.id},1)">↓</button>
-<button class="delete" onclick="removeElement(${e.id})">削除</button>
+html+=`
+<div class="field">
+<label>画像URL</label>
+<input type="url" data-key="src" value="${attr(e.src)}">
 </div>
-`;
 
-container.appendChild(div);
+<div class="field">
+<label>代替テキスト</label>
+<input type="text" data-key="alt" value="${attr(e.alt)}">
+</div>`;
+
+}
+
+if(e.type==="video"){
+
+html+=`
+<div class="field">
+<label>動画URL</label>
+<input type="url" data-key="src" value="${attr(e.src)}">
+</div>`;
+
+}
+
+if(e.type==="youtube"){
+
+html+=`
+<div class="field">
+<label>YouTube URL</label>
+<input type="url" data-key="src" value="${attr(e.src)}">
+</div>`;
+
+}
+
+if(["input","textarea"].includes(e.type)){
+
+html+=`
+<div class="field">
+<label>プレースホルダー</label>
+<input type="text" data-key="placeholder" value="${attr(e.placeholder)}">
+</div>`;
+
+}
+
+html+=`</div>`;
+
+html+=`
+<div class="setting-section">
+
+<div class="setting-title">文字</div>
+
+<div class="field">
+<label>文字色</label>
+<input type="color" data-key="color" value="${e.color}">
+</div>
+
+<div class="field">
+<label>サイズ</label>
+<div class="range">
+<input type="range" min="8" max="72" data-key="fontSize" value="${e.fontSize}">
+<span>${e.fontSize}px</span>
+</div>
+</div>
+
+<div class="field">
+<label>太さ</label>
+<select data-key="fontWeight">
+<option value="normal">通常</option>
+<option value="bold">太字</option>
+</select>
+</div>
+
+<div class="field">
+<label>位置</label>
+<select data-key="textAlign">
+<option value="left">左</option>
+<option value="center">中央</option>
+<option value="right">右</option>
+</select>
+</div>
+
+</div>`;
+
+html+=`
+<div class="setting-section">
+
+<div class="setting-title">背景</div>
+
+<div class="field">
+<label>背景色</label>
+<input type="color" data-key="background" value="${e.background}">
+</div>
+
+<div class="field">
+<label>透明度</label>
+<div class="range">
+<input type="range" min="0.1" max="1" step="0.1" data-key="opacity" value="${e.opacity}">
+<span>${e.opacity}</span>
+</div>
+</div>
+
+</div>`;
+
+html+=`
+<div class="setting-section">
+
+<div class="setting-title">枠線</div>
+
+<div class="field">
+<label>種類</label>
+<select data-key="border">
+<option value="none">なし</option>
+<option value="solid">実線</option>
+<option value="dashed">破線</option>
+<option value="dotted">点線</option>
+</select>
+</div>
+
+<div class="two">
+
+<div class="field">
+<label>色</label>
+<input type="color" data-key="borderColor" value="${e.borderColor}">
+</div>
+
+<div class="field">
+<label>太さ</label>
+<input type="number" data-key="borderWidth" value="${e.borderWidth}" min="0" max="20">
+</div>
+
+</div>
+
+<div class="field">
+<label>角丸</label>
+<input type="number" data-key="borderRadius" value="${e.borderRadius}" min="0" max="100">
+</div>
+
+<label>
+<input type="checkbox" data-key="shadow" ${e.shadow?"checked":""}>
+影を付ける
+</label>
+
+</div>`;
+
+html+=`
+<div class="setting-section">
+
+<div class="setting-title">サイズ</div>
+
+<div class="field">
+<label>幅</label>
+<input type="text" data-key="width" value="${attr(e.width)}" placeholder="100% / 300px">
+</div>
+
+<div class="field">
+<label>高さ</label>
+<input type="text" data-key="height" value="${attr(e.height)}" placeholder="自動 / 200px">
+</div>
+
+<div class="two">
+
+<div class="field">
+<label>内側余白</label>
+<input type="number" data-key="padding" value="${e.padding}" min="0">
+</div>
+
+<div class="field">
+<label>外側余白</label>
+<input type="number" data-key="margin" value="${e.margin}" min="0">
+</div>
+
+</div>
+
+</div>`;
+
+html+=`
+<div class="setting-section">
+
+<div class="action-row">
+<button class="action" onclick="moveElement(${e.id},-1)">↑ 上へ</button>
+<button class="action" onclick="moveElement(${e.id},1)">↓ 下へ</button>
+</div>
+
+<div class="action-row">
+<button class="action" onclick="duplicateElement(${e.id})">複製</button>
+<button class="action red" onclick="deleteElement(${e.id})">削除</button>
+</div>
+
+</div>`;
+
+box.innerHTML=html;
+
+box.querySelectorAll("[data-key]").forEach(input=>{
+
+let key=input.dataset.key;
+
+if(input.type==="checkbox"){
+input.checked=!!e[key];
+}else{
+input.value=e[key]??"";
+}
+
+input.addEventListener("input",()=>{
+
+let old=state();
+
+if(input.type==="checkbox"){
+e[key]=input.checked;
+}else{
+e[key]=input.value;
+}
+
+if(old!==state()){
+history=history.slice(0,historyIndex+1);
+history.push(state());
+historyIndex=history.length-1;
+}
+
+renderCanvas();
+
+if(input.type==="range"){
+let span=input.parentElement.querySelector("span");
+
+if(span){
+span.textContent=e[key]+(key==="fontSize"?"px":"");
+}
+}
+
 });
 
-update();
-}
-
-function generateHTML(){
-
-let title=escapeHTML(document.getElementById("pageTitle").value);
-let bg=document.getElementById("bgColor").value;
-let color=document.getElementById("textColor").value;
-
-let body="";
-
-elements.forEach(e=>{
-
-if(e.type==="heading"){
-let level=e.level||"h1";
-body+=`<${level}>${escapeHTML(e.text)}</${level}>\n`;
-}
-
-if(e.type==="text"){
-body+=`<p>${escapeHTML(e.text).replace(/\n/g,"<br>")}</p>\n`;
-}
-
-if(e.type==="button"){
-body+=`<button onclick="location.href='${escapeAttr(e.url||"#")}'">${escapeHTML(e.text)}</button>\n`;
-}
-
-if(e.type==="link"){
-body+=`<p><a href="${escapeAttr(e.url)}">${escapeHTML(e.text)}</a></p>\n`;
-}
-
-if(e.type==="image"){
-body+=`<img src="${escapeAttr(e.src)}" style="max-width:100%;">\n`;
-}
-
-if(e.type==="input"){
-body+=`<input type="text" placeholder="${escapeAttr(e.placeholder)}">\n`;
-}
-
-if(e.type==="line"){
-body+="<hr>\n";
-}
-
-if(e.type==="space"){
-body+='<div style="height:30px"></div>\n';
-}
-
 });
+
+}
+
+
+function setDevice(type){
+
+let canvas=document.getElementById("canvas");
+
+canvas.classList.remove("mobile","tablet");
+
+document.querySelectorAll(".device").forEach(x=>{
+x.classList.remove("active");
+});
+
+if(type==="mobile"){
+canvas.classList.add("mobile");
+document.getElementById("mobile").classList.add("active");
+}
+
+if(type==="tablet"){
+canvas.classList.add("tablet");
+document.getElementById("tablet").classList.add("active");
+}
+
+if(type==="desktop"){
+document.getElementById("desktop").classList.add("active");
+}
+
+}
+
+
+function getHTML(){
+
+let title="My Website";
+
+let body=elements.map(e=>elementPreview(e)).join("\n");
 
 return `<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${title}</title>
+<title>${esc(title)}</title>
 <style>
+*{box-sizing:border-box}
 body{
 margin:0;
 padding:30px;
-font-family:Arial,sans-serif;
-background:${bg};
-color:${color};
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
 }
-button,input{
-padding:10px;
-margin:5px;
+img,video,iframe{
+max-width:100%;
 }
-img{
-display:block;
-margin:10px 0;
+button,input,textarea,select{
+font-family:inherit;
 }
+${customCSS}
 </style>
 </head>
 <body>
-
 ${body}
+<script>
+${customJS}
+<\/script>
 </body>
 </html>`;
+
 }
 
-function update(){
 
-let html=generateHTML();
+function openCode(){
 
-document.getElementById("code").value=html;
+document.getElementById("codeModal").classList.add("show");
 
-let preview=document.getElementById("preview");
+showCode("html");
 
-preview.innerHTML="";
-
-let frame=document.createElement("iframe");
-
-frame.style.width="100%";
-frame.style.height="500px";
-frame.style.border="0";
-frame.srcdoc=html;
-
-preview.appendChild(frame);
 }
+
+
+function closeCode(){
+
+document.getElementById("codeModal").classList.remove("show");
+
+}
+
+
+function showCode(type){
+
+let code="";
+
+document.querySelectorAll(".code-tab").forEach(x=>{
+x.classList.remove("active");
+});
+
+if(type==="html"){
+
+document.getElementById("tabHTML").classList.add("active");
+
+code=getHTML();
+
+}
+
+if(type==="css"){
+
+document.getElementById("tabCSS").classList.add("active");
+
+code=`
+*{box-sizing:border-box}
+body{
+margin:0;
+padding:30px;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
+img,video,iframe{
+max-width:100%;
+}
+${customCSS}`;
+
+}
+
+if(type==="js"){
+
+document.getElementById("tabJS").classList.add("active");
+
+code=customJS;
+
+}
+
+document.getElementById("code").value=code;
+
+}
+
 
 function copyCode(){
 
@@ -336,21 +1758,15 @@ navigator.clipboard.writeText(
 document.getElementById("code").value
 );
 
-let buttons=document.querySelectorAll(".row button");
+toast("コピーしました");
 
-buttons[0].textContent="コピーしました";
-
-setTimeout(()=>{
-buttons[0].textContent="コピー";
-},1500);
 }
+
 
 function downloadHTML(){
 
-let html=document.getElementById("code").value;
-
 let blob=new Blob(
-[html],
+[getHTML()],
 {type:"text/html;charset=utf-8"}
 );
 
@@ -364,29 +1780,316 @@ a.download="index.html";
 a.click();
 
 URL.revokeObjectURL(url);
+
+toast("HTMLを保存しました");
+
 }
 
-function escapeHTML(str){
-return String(str)
+
+function saveProject(){
+
+let data=JSON.stringify({
+elements,
+nextId,
+customCSS,
+customJS
+},null,2);
+
+let blob=new Blob(
+[data],
+{type:"application/json"}
+);
+
+let url=URL.createObjectURL(blob);
+
+let a=document.createElement("a");
+
+a.href=url;
+a.download="project.json";
+
+a.click();
+
+URL.revokeObjectURL(url);
+
+toast("プロジェクトを保存しました");
+
+}
+
+
+function loadProject(){
+
+let input=document.createElement("input");
+
+input.type="file";
+input.accept=".json";
+
+input.onchange=()=>{
+
+let file=input.files[0];
+
+if(!file)return;
+
+let reader=new FileReader();
+
+reader.onload=()=>{
+
+try{
+
+restore(reader.result);
+
+toast("読み込みました");
+
+}catch{
+
+toast("読み込みに失敗しました");
+
+}
+
+};
+
+reader.readAsText(file);
+
+};
+
+input.click();
+
+}
+
+
+function newProject(){
+
+if(!confirm("現在のページを消しますか？"))return;
+
+saveHistory();
+
+elements=[];
+selectedId=null;
+nextId=1;
+
+render();
+
+}
+
+
+function restore(s){
+
+let data=JSON.parse(s);
+
+elements=data.elements||[];
+nextId=data.nextId||1;
+customCSS=data.customCSS||"";
+customJS=data.customJS||"";
+
+selectedId=null;
+
+render();
+
+}
+
+
+function youtubeId(url){
+
+try{
+
+let u=new URL(url);
+
+if(u.hostname==="youtu.be"){
+return u.pathname.slice(1);
+}
+
+if(u.searchParams.get("v")){
+return u.searchParams.get("v");
+}
+
+let parts=u.pathname.split("/");
+
+let i=parts.indexOf("embed");
+
+if(i>=0){
+return parts[i+1];
+}
+
+}catch{}
+
+return "";
+
+}
+
+
+function esc(v){
+
+return String(v??"")
 .replace(/&/g,"&amp;")
 .replace(/</g,"&lt;")
 .replace(/>/g,"&gt;")
 .replace(/"/g,"&quot;")
 .replace(/'/g,"&#039;");
+
 }
 
-function escapeAttr(str){
-return escapeHTML(str);
-}
 
-function escapeText(str){
-return String(str)
+function escText(v){
+
+return String(v??"")
 .replace(/&/g,"&amp;")
 .replace(/</g,"&lt;")
 .replace(/>/g,"&gt;");
+
 }
 
+
+function attr(v){
+
+return esc(v);
+
+}
+
+
+function toast(text){
+
+let t=document.getElementById("toast");
+
+t.textContent=text;
+
+t.style.display="block";
+
+clearTimeout(window.toastTimer);
+
+window.toastTimer=setTimeout(()=>{
+t.style.display="none";
+},1600);
+
+}
+
+
+function mobileParts(){
+
+document.querySelector(".left").style.display="block";
+
+document.querySelector(".left").style.position="fixed";
+
+document.querySelector(".left").style.left="0";
+
+document.querySelector(".left").style.top="56px";
+
+document.querySelector(".left").style.bottom="0";
+
+document.querySelector(".left").style.width="260px";
+
+document.querySelector(".left").style.zIndex="80";
+
+document.querySelector(".left").style.boxShadow="4px 0 15px #0003";
+
+}
+
+
+function mobileSettings(){
+
+if(!selectedId){
+
+toast("先に部品を選択してください");
+
+return;
+
+}
+
+let right=document.querySelector(".right");
+
+right.style.display="block";
+
+right.style.position="fixed";
+
+right.style.right="0";
+
+right.style.top="56px";
+
+right.style.bottom="0";
+
+right.style.width="300px";
+
+right.style.zIndex="80";
+
+right.style.boxShadow="-4px 0 15px #0003";
+
+}
+
+
+document.getElementById("canvas").addEventListener("click",e=>{
+
+if(e.target.id==="canvas"){
+
+selectedId=null;
+
 render();
+
+}
+
+});
+
+
+document.addEventListener("keydown",e=>{
+
+if((e.ctrlKey||e.metaKey)&&e.key==="z"){
+
+e.preventDefault();
+
+undo();
+
+}
+
+if((e.ctrlKey||e.metaKey)&&e.key==="y"){
+
+e.preventDefault();
+
+redo();
+
+}
+
+if((e.ctrlKey||e.metaKey)&&e.key==="s"){
+
+e.preventDefault();
+
+downloadHTML();
+
+}
+
+if(e.key==="Delete"&&selectedId){
+
+deleteElement(selectedId);
+
+}
+
+});
+
+
+document.addEventListener("click",e=>{
+
+if(window.innerWidth<=600){
+
+let left=document.querySelector(".left");
+let right=document.querySelector(".right");
+
+if(!left.contains(e.target)&&!e.target.closest(".mobile-bottom")){
+
+left.style.display="none";
+
+}
+
+if(!right.contains(e.target)&&!e.target.closest(".mobile-bottom")){
+
+right.style.display="none";
+
+}
+
+}
+
+});
+
+
+saveHistory();
+
+render();
+
 </script>
 
 </body>
